@@ -16,7 +16,7 @@
             <p> Total: <strong>@total</strong>. </p>
         </div>
 
-        <table class="table">
+        <table id="table" class="table">
             <thead>
                 <tr>
                     <th>
@@ -32,8 +32,6 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model)
-            {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.PopularName)
@@ -45,17 +43,16 @@
                         @Html.DisplayFor(modelItem => item.FamilyType)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a href="edit?id=">Edit</a> |
+                        <a href="details?id=">Details</a> |
+                        <a href="delete?id=">Delete</a>
                     </td>
                 </tr>
-            }
             </tbody>
         </table>
     </main>
     
-    <script src="assets/ascript.js"></script>
+    <script src="assets/classes.js"></script>
     <script src="assets/functions.js"></script>
 </body>
 </html>

@@ -1,0 +1,91 @@
+class Serpent {
+    #id;
+    #popularName;
+    #cientificName;
+    #familyType;
+    #isActive;
+
+    constructor(popularName, cientificName, familyType, serpentsArrayLength) {
+        this.#id = ++serpentsArrayLength;
+        this.#popularName = popularName;
+        this.#cientificName = cientificName;
+        this.#familyType = familyType;
+        this.#isActive = true;
+    }
+
+    getId = () => this.#id;
+
+    getPopularName = () => this.#popularName;
+    setPopularName = (value) => this.#popularName = value;
+
+    getCientificName = () => this.#cientificName;
+    setCientificName = (value) => this.#cientificName = value;
+
+    getFamilyType = () => this.#familyType;
+    setFamilyType = (value) => this.#familyType = value;
+
+    getIsActive = () => this.#isActive;
+    deleteSerpent = () => this.#isActive = false;
+}
+
+class Serpentario {
+    #serpentsArray;
+
+    constructor() {
+        this.#serpentsArray = [];
+    }
+
+    #findSerpent(id, onlyActives = false) {
+        this.#serpentsArray.forEach((serpent) => {
+            if (serpent.getId() == id) {
+                if (onlyActives === true)
+                    return serpent.getIsActive() === true ? this.#serpentsArray.indexOf(serpent) : false;
+                
+                return this.#serpentsArray.indexOf(serpent);
+            }
+        });
+
+        return false;
+    }
+
+    getAllSerpents(onlyActives = false) {
+        if (onlyActives === true) {
+            let activeSerpents = [];
+
+            this.#serpentsArray.forEach((serpent) => {
+                if (serpent.getIsActive() === true)
+                    activeSerpents.push(serpent);
+            });
+
+            return activeSerpents;
+        }
+
+        return this.#serpentsArray;
+    }
+
+    getSerpent(id = -1) {
+        const idxToReturn = id == -1 ? id : this.#findSerpent(id);
+        return this.#serpentsArray.at(idxToReturn);
+    }
+
+    setNewSerpent = (serpent) => this.#serpentsArray.push(serpent);
+    
+    deleteSerpent(id = -1) {
+        const indexToDelete = id == -1 ? id : this.#findSerpent(id, true);
+
+        if (indexToDelete === false)
+            throw "Serpent doesn't exist or had been already deleted.";
+        
+        this.#serpentsArray.at(indexToDelete).deleteSerpent();
+    }
+}
+
+function createEnum(values) {
+    const enumObject = {};
+    for (const val of values) {
+      enumObject[val] = val;
+    }
+    return Object.freeze(enumObject);
+}
+const Family = createEnum(['Boidae','Viperidae','Elapidae','Colubridae','Dipsadidae','Pythonidae']);
+

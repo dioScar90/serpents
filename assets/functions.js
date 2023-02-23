@@ -36,12 +36,13 @@ let serpentsToPush = [
     ["Cobra-verde", "Philodryas olfersii", Family.Colubridae]
 ];
 
-let serpentes = [];
+let serpentario = new Serpentario();
 serpentsToPush.forEach((serpent) => {
-    serpentes.push(new Serpent(serpent[0], serpent[1], serpent[2], serpentes.length));
+    const lenSerp = serpentario.getAllSerpents().length > 0 ? serpentario.getAllSerpents().at(-1).getId() : 0;
+    serpentario.setNewSerpent(new Serpent(serpent[0], serpent[1], serpent[2], lenSerp));
 });
 
-serpentes.forEach((serpent) => {
+serpentario.getAllSerpents().forEach((serpent) => {
     console.log("Id: " + serpent.getId() + "\n" +
     "Nome popular: " + serpent.getPopularName() + "\n" +
     "Nome científico: " + serpent.getCientificName() + "\n" +
