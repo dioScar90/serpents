@@ -36,16 +36,21 @@ class Serpentario {
     }
 
     #findSerpent(id, onlyActives = false) {
-        this.#serpentsArray.forEach((serpent) => {
+        let idxToReturn = false;
+
+        this.#serpentsArray.forEach((serpent, idx) => {
             if (serpent.getId() == id) {
-                if (onlyActives === true)
-                    return serpent.getIsActive() === true ? this.#serpentsArray.indexOf(serpent) : false;
+                if (onlyActives === true) {
+                    idxToReturn = serpent.getIsActive() === true ? idx : false;
+                    return;
+                }
                 
-                return this.#serpentsArray.indexOf(serpent);
+                idxToReturn = idx;
+                return;
             }
         });
 
-        return false;
+        return idxToReturn;
     }
 
     getAllSerpents(onlyActives = false) {
