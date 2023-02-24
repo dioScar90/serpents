@@ -56,20 +56,5 @@ function inicializeSerpents() {
 }
 
 function pushNewSerpent(serpent) {
-    // const lenSerp = serpentario.getAllSerpents().length > 0 ? serpentario.getAllSerpents().at(-1).getId() : 0;
     serpentario.setNewSerpent(serpent);
-}
-
-// function inicializePage() {
-//     if (window.sessionStorage.length > 0)
-//         return;
-    
-//     inicializeSerpents();
-// }
-
-window.onload = function() {
-    if (window.sessionStorage.length > 0)
-        return;
-    
-    inicializeSerpents();
 }

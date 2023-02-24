@@ -39,12 +39,12 @@
             <h1>Index</h1>
 
             <div class="d-flex justify-content-around">
-                <p> <a asp-action="Create">Create New</a> </p>
-                <p> Total: <strong>@total</strong>. </p>
+                <p> <a href="create.html">Create New</a> </p>
+                <p id="total"> Total: <strong>0</strong>. </p>
             </div>
 
             <table id="table" class="table">
-                <thead>
+                <thead id="thead">
                     <tr>
                         <th>
                             @Html.DisplayNameFor(model => model.PopularName)
@@ -58,7 +58,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tbody">
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.PopularName)
