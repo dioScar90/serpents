@@ -75,29 +75,38 @@ class MountItem {
     #mountEdit(id) {
         const editForm = document.querySelector("#edit-form");
         const inputId = editForm.querySelector("#id");
-        const inputPopularName = editForm.querySelector("#popular-mame");
-        const inputCientificName = editForm.querySelector("#cientific-mame");
+        const inputPopularName = editForm.querySelector("#popular-name");
+        const inputCientificName = editForm.querySelector("#cientific-name");
         const selectFamilyType = editForm.querySelector("#family-type");
         let strToJson = window.sessionStorage.getItem("serp_" + id);
         let serpent = JSON.parse(strToJson);
+        let id = Utils.getIdWithZero(serpent.id);
         
         if (serpent === false)
             return false;
         
+        inputId.value = id;
         inputPopularName.value = serpent.popularName;
         inputCientificName.value = serpent.cientificName;
 
         let families = Object.keys(Family);
         for (let i = 0; i < families.length; i++) {
-            //create options
+            const option = document.createElement("option");
+            option.value = families[i];
+            option.innerHTML = families[i];
+
+            if (families[i] == serpent.familyType)
+                option.selected = true;
+            
+            selectFamilyType.append(option);
         }
         
-        const allDd = details.querySelectorAll("dd");
-        allDd[0].innerHTML = serpent.popularName;
-        allDd[1].innerHTML = serpent.cientificName;
-        allDd[2].innerHTML = serpent.familyType;
+        // const allDd = details.querySelectorAll("dd");
+        // allDd[0].innerHTML = serpent.popularName;
+        // allDd[1].innerHTML = serpent.cientificName;
+        // allDd[2].innerHTML = serpent.familyType;
 
-        aEdit.setAttribute("href", `delete.html?id=${id}`);
+        // aEdit.setAttribute("href", `delete.html?id=${id}`);
     
         return true;
     }
@@ -124,8 +133,7 @@ class MountItem {
             if (serpent !== false) {
                 const tr = this.#getNewTrTbody();
                 const trLinks = tr.lastElementChild;
-                let idWithZero = '0' + serpent.id;
-                let id = idWithZero.slice(-2);
+                let id = Utils.getIdWithZero(serpent.id);
     
                 tr.children[0].innerHTML = serpent.popularName;
                 tr.children[1].innerHTML = serpent.cientificName;
@@ -204,17 +212,15 @@ class Render {
         this.#mountItem.table();
     }
 
-    #caseEdit(title) {
+    #caseEdit(title, actualUrl, homePageUrl) {
         this.#checkSessionLength();
         document.title = title;
 
         let id = actualUrl.searchParams.get("id");
-        let detailsOk = this.#mountItem.edit();
+        let detailsOk = this.#mountItem.edit(id);
 
         if (detailsOk === false)
             this.#backToHomePage(homePageUrl);
-        
-        
     }
 
     #caseDetails(title, actualUrl, homePageUrl) {
@@ -248,7 +254,7 @@ class Render {
                 this.#caseIndex("Serpentário");
                 break;
             case enumPages.Edit :
-                this.#caseEdit("Editar");            
+                this.#caseEdit("Editar", this.#actualUrl, this.#homePageUrl);            
                 break;
             case enumPages.Details :
                 this.#caseDetails("Detalhes", this.#actualUrl, this.#homePageUrl);            

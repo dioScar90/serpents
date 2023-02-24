@@ -1,7 +1,3 @@
-function setNewSerpent() {
-    //
-}
-
 function inicializeSerpents() {
     let serpentsToPush = [
         ["Surucucu", "Lachesis muta", Family.Viperidae],
@@ -57,4 +53,13 @@ function inicializeSerpents() {
 
 function pushNewSerpent(serpent) {
     serpentario.setNewSerpent(serpent);
+}
+
+function editSerpent(e) {
+    e.preventDefault();
+
+    const formValues = new FormValues(e.currentTarget);
+    let values = formValues.getValues();
+
+    calculate(key);
 }

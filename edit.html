@@ -22,7 +22,7 @@
             
             <div class="row">
                 <div class="col-md-4">
-                    <form action="" method="post" id="edit-form" onclick="thisFunction()">
+                    <form action="" method="post" id="edit-form" onclick="editSerpent(event)">
                         <input type="hidden" id="id" name="id" value="">
                         <div class="form-group">
                             <label class="control-label" for="popular-name"> Nome Popular </label>
@@ -38,16 +38,10 @@
                             <label class="control-label" for="family-type"> Família </label>
                             <select class="form-control" id="family-type" name="family-type" required>
                                 <option class="d-none" value=""> -- Escolha -- </option>
-                                <!-- <option value="Boidae">Boidae</option>
-                                <option value="Viperidae">Viperidae</option>
-                                <option value="Elapidae">Elapidae</option>
-                                <option value="Colubridae" selected="selected">Colubridae</option>
-                                <option value="Dipsadidae">Dipsadidae</option>
-                                <option value="Pythonidae">Pythonidae</option> -->
                             </select>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Save" class="btn btn-primary">
+                            <button type="submit" form="edit-form" class="btn btn-primary"> Save </button>
                         </div>
                     </form>
                 </div>

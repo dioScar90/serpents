@@ -1,3 +1,31 @@
+class Utils {
+    static getIdWithZero(id) {
+        let idWithZero = '0' + id;
+        return idWithZero.slice(-2);
+    }
+}
+
+class FormValues {
+    #data;
+    #newObj;
+
+    constructor(form) {
+        this.#data = new FormData(form);
+        this.#newObj = new Object();
+    }
+
+    #processValues() {
+        for (const [name, val] of this.#data) {
+            this.#newObj[name] = val;
+        }
+    }
+
+    getValues() {
+        this.#processValues();
+        return this.#newObj;
+    }
+}
+
 class Serpent {
     #id;
     #popularName;
@@ -87,9 +115,8 @@ class Serpentario {
 
     setNewSerpent(serpent) {
         this.#serpentsArray.push(serpent);
-
-        let idWithZero = '0' + serpent.getId();
-        let serpId = "serp_" + idWithZero.slice(-2);
+        
+        let serpId = "serp_" + Utils.getIdWithZero(serpent.getId());
         let serpData = JSON.stringify(serpent.getSerpentAsAnObjectToJson());
         let isSerpentAlreadySetted = window.sessionStorage.getItem(serpId);
 
@@ -106,9 +133,8 @@ class Serpentario {
             throw "Serpent doesn't exist or had been already deleted.";
         
         this.#serpentsArray.at(indexToDelete).deleteSerpent();
-
-        let idWithZero = '0' + this.#serpentsArray.at(indexToDelete).getId();
-        let serpId = "serp_" + idWithZero.slice(-2);
+        
+        let serpId = "serp_" + Utils.getIdWithZero(this.#serpentsArray.at(indexToDelete).getId());
         let serpData = JSON.stringify(false);
         window.sessionStorage.setItem(serpId, serpData);
     }
