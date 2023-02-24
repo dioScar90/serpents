@@ -10,6 +10,40 @@ function getNewTrTbody() {
     return trTbody.content.firstElementChild;
 }
 
+function mountHeader() {
+    const header = document.querySelector("header");
+    header.innerHTML = `
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html"> Serpents </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="index.html"> Home </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="create.html"> Create New </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    `;
+}
+
+function mountFooter() {
+    const footer = document.querySelector("footer");
+    footer.innerHTML = `
+        <div class="container">
+            &copy; 2023 - Serpents - <a href="privacy.html"> Privacy </a>
+        </div>
+    `;
+}
+
 function mountDetails(id) {
     const details = document.querySelector("#dl-details");
     const aEdit = document.querySelector("#edit");
@@ -70,44 +104,77 @@ function mountTable() {
     total.firstElementChild.innerHTML = totalSerpents;
 }
 
+const backToHomePage = (homePageUrl) => window.location = homePageUrl;
+
+function checkSessionLength() {
+    if (window.sessionStorage.length == 0)
+        backToHomePage(homePageUrl);
+}
+
+function caseIndex(title) {
+    document.title = title;
+
+    if (window.sessionStorage.length == 0)
+        inicializeSerpents();
+    
+    mountTable();
+}
+
+function caseEdit(title) {
+    checkSessionLength();
+
+    document.title = title;
+}
+
+function caseDetails(title, actualUrl, homePageUrl) {
+    checkSessionLength();
+
+    document.title = title;
+
+    let id = actualUrl.searchParams.get("id");
+    let detailsOk = mountDetails(id);
+
+    if (detailsOk === false)
+        backToHomePage(homePageUrl);
+}
+
+function caseDelete(title) {
+    checkSessionLength();
+
+    document.title = title;
+}
+
+function caseCreate(title) {
+    checkSessionLength();
+    
+    document.title = title;
+}
+
 window.onload = function() {
     let actualUrl = new URL(location.href);
     let fileName = actualUrl.pathname.split(`/`).at(-1);
     let homePageUrl = actualUrl.pathname.substring(0, actualUrl.pathname.lastIndexOf(`/`) + 1) + "index.html";
 
-    switch(fileName) {
+    mountHeader();
+    mountFooter();
+
+    switch (fileName) {
         case "index.html" :
-            if (window.sessionStorage.length == 0)
-                inicializeSerpents();
-            mountTable();
+            caseIndex("Serpentário");
             break;
         case "edit.html" :
-            if (window.sessionStorage.length == 0)
-                window.location = homePageUrl;
+            caseEdit("Editar");            
             break;
         case "details.html" :
-            if (window.sessionStorage.length == 0)
-                window.location = homePageUrl;
-            
-            let id = actualUrl.searchParams.get("id");
-            let detailsOk = mountDetails(id);
-
-            if (detailsOk === false)
-                window.location = homePageUrl;
-
+            caseDetails("Detalhes", actualUrl, homePageUrl);            
             break;
         case "delete.html" :
-            if (window.sessionStorage.length == 0)
-                window.location = homePageUrl;
+            caseDelete("Remover serpente");
             break;
         case "create.html" :
+            caseCreate("Criar serpente");
             break;
         default:
-            throw "Error 404";
+            backToHomePage(homePageUrl);
     }
-
-    // if (window.sessionStorage.length == 0)
-    //     inicializeSerpents();
-
-    // mountTable();
 }
