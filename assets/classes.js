@@ -73,7 +73,18 @@ class Serpentario {
         return this.#serpentsArray.at(idxToReturn);
     }
 
-    setNewSerpent = (serpent) => this.#serpentsArray.push(serpent);
+    setNewSerpent(serpent) {
+        this.#serpentsArray.push(serpent);
+
+        let serpId = "serp_" + serpent.getId();
+        let serpData = JSON.stringify(serpent);
+        let isSerpentAlreadySetted = window.sessionStorage.getItem(serpId);
+
+        if (isSerpentAlreadySetted === false)
+            throw "Serpent is already setted on sessionStorage()";
+        
+        window.sessionStorage.setItem(serpId, serpData);
+    }
     
     deleteSerpent(id = -1) {
         const indexToDelete = id == -1 ? id : this.#findSerpent(id, true);
@@ -82,6 +93,10 @@ class Serpentario {
             throw "Serpent doesn't exist or had been already deleted.";
         
         this.#serpentsArray.at(indexToDelete).deleteSerpent();
+
+        let serpId = "serp_" + this.#serpentsArray.at(indexToDelete).getId();
+        let serpData = JSON.stringify(false);
+        window.sessionStorage.setItem(serpId, serpData);
     }
 }
 

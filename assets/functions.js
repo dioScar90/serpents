@@ -42,9 +42,14 @@ serpentsToPush.forEach((serpent) => {
     serpentario.setNewSerpent(new Serpent(serpent[0], serpent[1], serpent[2], lenSerp));
 });
 
-serpentario.getAllSerpents().forEach((serpent) => {
-    console.log("Id: " + serpent.getId() + "\n" +
-    "Nome popular: " + serpent.getPopularName() + "\n" +
-    "Nome científico: " + serpent.getCientificName() + "\n" +
-    "Família: " + serpent.getFamilyType() + "\n");
-});
+// serpentario.getAllSerpents().forEach((serpent) => {
+//     console.log("Id: " + serpent.getId() + "\n" +
+//     "Nome popular: " + serpent.getPopularName() + "\n" +
+//     "Nome científico: " + serpent.getCientificName() + "\n" +
+//     "Família: " + serpent.getFamilyType() + "\n");
+// });
+
+function pushNewSerpent(serpent) {
+    // const lenSerp = serpentario.getAllSerpents().length > 0 ? serpentario.getAllSerpents().at(-1).getId() : 0;
+    serpentario.setNewSerpent(serpent);
+}
