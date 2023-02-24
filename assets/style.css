@@ -19,9 +19,9 @@
 }
 
 body {
-    margin: 0;
+    /* margin: 0;
     border: 1px solid var(--fundo);
-    background-color: var(--dark);
+    background-color: var(--dark); */
 }
 
 main.container {

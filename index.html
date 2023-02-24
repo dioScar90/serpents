@@ -33,60 +33,64 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
-        <h1>Index</h1>
+            <h1>Index</h1>
 
-        <div class="d-flex justify-content-around">
-            <p> <a asp-action="Create">Create New</a> </p>
-            <p> Total: <strong>@total</strong>. </p>
-        </div>
+            <div class="d-flex justify-content-around">
+                <p> <a asp-action="Create">Create New</a> </p>
+                <p> Total: <strong>@total</strong>. </p>
+            </div>
 
-        <table id="table" class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PopularName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CientificName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FamilyType)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PopularName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CientificName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FamilyType)
-                    </td>
-                    <td>
-                        <a href="edit?id=">Edit</a> |
-                        <a href="details?id=">Details</a> |
-                        <a href="delete?id=">Delete</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </main>
-</div>
-
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2023 - Serpents - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <table id="table" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PopularName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CientificName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FamilyType)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PopularName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CientificName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FamilyType)
+                        </td>
+                        <td>
+                            <a href="edit?id=">Edit</a> |
+                            <a href="details?id=">Details</a> |
+                            <a href="delete?id=">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
     </div>
-</footer>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
-<script src="assets/classes.js"></script>
-<script src="assets/functions.js"></script>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - Serpents - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+    <script src="assets/classes.js"></script>
+    <script src="assets/functions.js"></script>
+    <script src="assets/session.js"></script>
+    <script src="assets/render.js"></script>
 </body>
 </html>

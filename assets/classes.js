@@ -26,6 +26,18 @@ class Serpent {
 
     getIsActive = () => this.#isActive;
     deleteSerpent = () => this.#isActive = false;
+
+    getSerpentAsAnObjectToJson() {
+        let obj = {};
+
+        obj.id = this.#id;
+        obj.popularName = this.#popularName;
+        obj.cientificName = this.#cientificName;
+        obj.familyType = this.#familyType;
+        obj.isActive = this.#isActive;
+
+        return obj;
+    }
 }
 
 class Serpentario {
@@ -76,11 +88,12 @@ class Serpentario {
     setNewSerpent(serpent) {
         this.#serpentsArray.push(serpent);
 
-        let serpId = "serp_" + serpent.getId();
-        let serpData = JSON.stringify(serpent);
+        let idWithZero = '0' + serpent.getId();
+        let serpId = "serp_" + idWithZero.slice(-2);
+        let serpData = JSON.stringify(serpent.getSerpentAsAnObjectToJson());
         let isSerpentAlreadySetted = window.sessionStorage.getItem(serpId);
 
-        if (isSerpentAlreadySetted === false)
+        if (isSerpentAlreadySetted !== false && isSerpentAlreadySetted !== null)
             throw "Serpent is already setted on sessionStorage()";
         
         window.sessionStorage.setItem(serpId, serpData);
@@ -94,7 +107,8 @@ class Serpentario {
         
         this.#serpentsArray.at(indexToDelete).deleteSerpent();
 
-        let serpId = "serp_" + this.#serpentsArray.at(indexToDelete).getId();
+        let idWithZero = '0' + this.#serpentsArray.at(indexToDelete).getId();
+        let serpId = "serp_" + idWithZero.slice(-2);
         let serpData = JSON.stringify(false);
         window.sessionStorage.setItem(serpId, serpData);
     }
@@ -108,4 +122,3 @@ function createEnum(values) {
     return Object.freeze(enumObject);
 }
 const Family = createEnum(['Boidae','Viperidae','Elapidae','Colubridae','Dipsadidae','Pythonidae']);
-
