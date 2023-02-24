@@ -22,29 +22,29 @@
             
             <div class="row">
                 <div class="col-md-4">
-                    <form asp-action="Edit">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="Id">
+                    <form action="" method="post" id="edit-form" onclick="thisFunction()">
+                        <input type="hidden" id="id" name="id" value="">
                         <div class="form-group">
-                            <label asp-for="PopularName" class="control-label"></label>
-                            <input asp-for="PopularName" class="form-control">
-                            <span asp-validation-for="PopularName" class="text-danger"></span>
+                            <label class="control-label" for="popular-name"> Nome Popular </label>
+                            <input class="form-control valid" type="text" id="popular-name" name="popular-name" value="" required>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="popular-name" data-valmsg-replace="true"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="CientificName" class="control-label"></label>
-                            <input asp-for="CientificName" class="form-control">
-                            <span asp-validation-for="CientificName" class="text-danger"></span>
+                            <label class="control-label" for="cientific-name"> Nome Científico </label>
+                            <input class="form-control" type="text" id="cientific-name" name="cientific-name" value="" required>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="cientific-name" data-valmsg-replace="true"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="FamilyType" class="control-label"></label>
-                            <select asp-for="FamilyType" class="form-control">
+                            <label class="control-label" for="family-type"> Família </label>
+                            <select class="form-control" id="family-type" name="family-type" required>
                                 <option class="d-none" value=""> -- Escolha -- </option>
-                                @foreach (var family in Enum.GetValues(typeof(Family)).Cast<Family>())
-                                {
-                                    <option value="@family">@family</option>
-                                }
+                                <!-- <option value="Boidae">Boidae</option>
+                                <option value="Viperidae">Viperidae</option>
+                                <option value="Elapidae">Elapidae</option>
+                                <option value="Colubridae" selected="selected">Colubridae</option>
+                                <option value="Dipsadidae">Dipsadidae</option>
+                                <option value="Pythonidae">Pythonidae</option> -->
                             </select>
-                            @* <span asp-validation-for="FamilyType" class="text-danger"></span> *@
                         </div>
                         <div class="form-group">
                             <input type="submit" value="Save" class="btn btn-primary">
@@ -54,7 +54,7 @@
             </div>
             
             <div>
-                <a asp-action="Index">Back to List</a>
+                <a href="index.html">Back to List</a>
             </div>
             
         </main>

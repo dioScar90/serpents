@@ -117,7 +117,13 @@ class Serpentario {
 function createEnum(values) {
     const enumObject = {};
     for (const val of values) {
-      enumObject[val] = val;
+        let name = val;
+        if (val.search(`.`) > -1) {
+            let correctName = val.split(`.`)[0];
+            name = correctName[0].charAt(0).toUpperCase() + correctName.slice(1).toLowerCase();
+        }
+        
+        enumObject[name] = val;
     }
     return Object.freeze(enumObject);
 }
