@@ -22,31 +22,28 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="PopularName" class="control-label"></label>
-                            <input asp-for="PopularName" class="form-control">
-                            <span asp-validation-for="PopularName" class="text-danger"></span>
+                    <form action="" method="post" id="create-form" onsubmit="createNewSerpent(event)">
+                        <input type="hidden" id="id" name="id" value="">
+                        
+                        <div class="form-group mb-3">
+                            <label class="control-label" for="popular-name"> Nome Popular </label>
+                            <input class="form-control valid" type="text" id="popular-name" name="popularName" required>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="CientificName" class="control-label"></label>
-                            <input asp-for="CientificName" class="form-control">
-                            <span asp-validation-for="CientificName" class="text-danger"></span>
+                        
+                        <div class="form-group mb-3">
+                            <label class="control-label" for="cientific-name"> Nome Científico </label>
+                            <input class="form-control" type="text" id="cientific-name" name="cientificName" required>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="FamilyType" class="control-label"></label>
-                            <select asp-for="FamilyType" class="form-control">
+                        
+                        <div class="form-group mb-3">
+                            <label class="control-label" for="family-type"> Família </label>
+                            <select role="button" class="form-control" id="family-type" name="familyType" required>
                                 <option class="d-none" value=""> -- Escolha -- </option>
-                                @foreach (var family in Enum.GetValues(typeof(Family)).Cast<Family>())
-                                {
-                                    <option value="@family">@family</option>
-                                }
                             </select>
-                            @* <span asp-validation-for="FamilyType" class="text-danger"></span> *@
                         </div>
+                        
                         <div class="form-group">
-                            <input type="submit" value="Create" class="btn btn-primary">
+                            <button type="submit" form="create-form" class="btn btn-primary"> Save </button>
                         </div>
                     </form>
                 </div>

@@ -54,11 +54,37 @@ class MountItem {
         `;
     }
 
+    #mountCreate() {
+        const createForm = document.querySelector("#create-form");
+        // const inputId = createForm.querySelector("#id");
+        // const inputPopularName = createForm.querySelector("#popular-name");
+        // const inputCientificName = createForm.querySelector("#cientific-name");
+        const selectFamilyType = createForm.querySelector("#family-type");
+        // let serpent = Utils.getSerpentAfterJson(id);
+        
+        // if (serpent === false)
+        //     return false;
+        
+        // inputId.value = id;
+        // inputPopularName.value = serpent.popularName;
+        // inputCientificName.value = serpent.cientificName;
+
+        let families = Utils.getObjectKeysAsArray(Family);
+        for (let i = 0; i < families.length; i++) {
+            const option = document.createElement("option");
+            option.value = families[i];
+            option.innerHTML = families[i];
+            
+            selectFamilyType.append(option);
+        }
+        
+        return true;
+    }
+
     #mountDetails(id) {
         const details = document.querySelector("#dl-details");
         const aEdit = document.querySelector("#edit");
-        let strToJson = window.sessionStorage.getItem("serp_" + id);
-        let serpent = JSON.parse(strToJson);
+        let serpent = Utils.getSerpentAfterJson(id);
         
         if (serpent === false)
             return false;
@@ -67,7 +93,7 @@ class MountItem {
         allDd[0].innerHTML = serpent.popularName;
         allDd[1].innerHTML = serpent.cientificName;
         allDd[2].innerHTML = serpent.familyType;
-        aEdit.setAttribute("href", `delete.html?id=${id}`);
+        aEdit.setAttribute("href", `edit.html?id=${id}`);
     
         return true;
     }
@@ -78,9 +104,7 @@ class MountItem {
         const inputPopularName = editForm.querySelector("#popular-name");
         const inputCientificName = editForm.querySelector("#cientific-name");
         const selectFamilyType = editForm.querySelector("#family-type");
-        let strToJson = window.sessionStorage.getItem("serp_" + id);
-        let serpent = JSON.parse(strToJson);
-        let id = Utils.getIdWithZero(serpent.id);
+        let serpent = Utils.getSerpentAfterJson(id);
         
         if (serpent === false)
             return false;
@@ -89,7 +113,7 @@ class MountItem {
         inputPopularName.value = serpent.popularName;
         inputCientificName.value = serpent.cientificName;
 
-        let families = Object.keys(Family);
+        let families = Utils.getObjectKeysAsArray(Family);
         for (let i = 0; i < families.length; i++) {
             const option = document.createElement("option");
             option.value = families[i];
@@ -101,18 +125,11 @@ class MountItem {
             selectFamilyType.append(option);
         }
         
-        // const allDd = details.querySelectorAll("dd");
-        // allDd[0].innerHTML = serpent.popularName;
-        // allDd[1].innerHTML = serpent.cientificName;
-        // allDd[2].innerHTML = serpent.familyType;
-
-        // aEdit.setAttribute("href", `delete.html?id=${id}`);
-    
         return true;
     }
 
     #mountTable() {
-        let sessionKeys = Object.keys(window.sessionStorage).sort();
+        let sessionKeys = Utils.getObjectKeysAsArray(window.sessionStorage).sort();
         let totalSerpents = 0;
     
         if (sessionKeys.length == 0)
@@ -128,7 +145,7 @@ class MountItem {
         thead.append(trThead);
         
         for (let i = 0; i < sessionKeys.length; i++) {
-            let serpent = JSON.parse(window.sessionStorage.getItem(sessionKeys[i]));
+            let serpent = Utils.getSerpentAfterJson(sessionKeys[i], true);
             
             if (serpent !== false) {
                 const tr = this.#getNewTrTbody();
@@ -165,6 +182,9 @@ class MountItem {
             case enumTemplate.Footer :
                 this.#mountFooter();
                 break;
+            case enumTemplate.Create :
+                this.#mountCreate();
+                break;
             case enumTemplate.Details :
                 return this.#mountDetails(id);
             case enumTemplate.Edit :
@@ -176,6 +196,7 @@ class MountItem {
 
     header = () => this.#mount(this.#enumTemplate.Header);
     footer = () => this.#mount(this.#enumTemplate.Footer);
+    create = () => this.#mount(this.#enumTemplate.Create);
     details = (id) => this.#mount(this.#enumTemplate.Details, id);
     edit = (id) => this.#mount(this.#enumTemplate.Edit, id);
     table = () => this.#mount(this.#enumTemplate.Table);
@@ -196,7 +217,7 @@ class Render {
         this.#mountItem = mountItem;
     }
 
-    #backToHomePage = (homePageUrl) => window.location = homePageUrl;
+    #backToHomePage = (homePageUrl) => Utils.reloadPage(homePageUrl);
 
     #checkSessionLength() {
         if (window.sessionStorage.length == 0)
@@ -242,6 +263,11 @@ class Render {
     #caseCreate(title) {
         this.#checkSessionLength();
         document.title = title;
+
+        let createOk = this.#mountItem.create();
+
+        if (createOk === false)
+            this.#backToHomePage(homePageUrl);
     }
 
     renderPage() {
@@ -272,9 +298,9 @@ class Render {
 }
 
 window.onload = function() {
-    let actualUrl = new URL(location.href);
-    let fileName = actualUrl.pathname.split(`/`).at(-1);
-    let homePageUrl = actualUrl.pathname.substring(0, actualUrl.pathname.lastIndexOf(`/`) + 1) + "index.html";
+    let actualUrl = Utils.getActualUrl();
+    let fileName = Utils.getFileName(actualUrl);
+    let homePageUrl = Utils.getHomePageUrl(actualUrl);
 
     const mountItem = new MountItem(Template);
     const render = new Render(actualUrl, fileName, homePageUrl, Pages, mountItem);

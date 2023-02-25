@@ -3,6 +3,49 @@ class Utils {
         let idWithZero = '0' + id;
         return idWithZero.slice(-2);
     }
+
+    static getSerpentAfterJson(id, alreadyCorrectId = false) {
+        let correctId = alreadyCorrectId === true ? id : "serp_" + this.getIdWithZero(id);
+        let strToJson = window.sessionStorage.getItem(correctId);
+        return JSON.parse(strToJson);
+    }
+
+    static createNewSerpent(newSerpentObj) {
+        let success = false;
+
+        try {
+            let serpId = "serp_" + this.getIdWithZero(newSerpentObj.id);
+            window.sessionStorage.setItem(serpId, JSON.stringify(newSerpentObj));
+            success = true;
+        } catch (e) {
+            console.log(e);
+        }
+
+        return success;
+    }
+
+    static updateSerpent(serpentObj) {
+        let success = false;
+
+        try {
+            let serpId = "serp_" + this.getIdWithZero(serpentObj.id);
+            window.sessionStorage.setItem(serpId, JSON.stringify(serpentObj));
+            success = true;
+        } catch (e) {
+            console.log(e);
+        }
+
+        return success;
+    }
+
+    static getObjectKeysAsArray = (obj) => Object.keys(obj);
+
+    static reloadPage = (pageUrl) => window.location = pageUrl;
+    static getActualUrl = () => new URL(location.href);
+    static getFileName = (actualUrl) => actualUrl.pathname.split(`/`).at(-1);
+    static getPageUrl = (actualUrl, pageName) => actualUrl.pathname.substring(0, actualUrl.pathname.lastIndexOf(`/`) + 1) + pageName;
+    static getHomePageUrl = (actualUrl) => this.getPageUrl(actualUrl, "index.html");
+    static backToHomePage = () => window.location = this.getHomePageUrl(this.getActualUrl());
 }
 
 class FormValues {
@@ -13,15 +56,22 @@ class FormValues {
         this.#data = new FormData(form);
         this.#newObj = new Object();
     }
-
-    #processValues() {
-        for (const [name, val] of this.#data) {
+    
+    #processValues(mustCreateNewId) {
+        for (let [name, val] of this.#data) {
+            if (name == "id" && mustCreateNewId === true) {
+                let arrKeys = Utils.getObjectKeysAsArray(window.sessionStorage).sort();
+                let lastKey = arrKeys.at(-1);
+                let keyAsNumber = +lastKey.split("serp_")[1];
+                val = ++keyAsNumber;
+            }
             this.#newObj[name] = val;
         }
     }
 
-    getValues() {
-        this.#processValues();
+    getValues(mustCreateNewId = false) {
+        if (Utils.getObjectKeysAsArray(this.#newObj).length == 0)
+            this.#processValues(mustCreateNewId);
         return this.#newObj;
     }
 }

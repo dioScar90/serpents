@@ -55,11 +55,26 @@ function pushNewSerpent(serpent) {
     serpentario.setNewSerpent(serpent);
 }
 
+function createNewSerpent(e) {
+    e.preventDefault();
+    
+    const formValues = new FormValues(e.target);
+    let newSerpentObj = formValues.getValues(true);
+    let serpentCreated = Utils.createNewSerpent(newSerpentObj);
+    
+    if (serpentCreated === true) {
+        Utils.backToHomePage();
+    }
+}
+
 function editSerpent(e) {
     e.preventDefault();
 
-    const formValues = new FormValues(e.currentTarget);
-    let values = formValues.getValues();
+    const formValues = new FormValues(e.target);
+    let serpentObj = formValues.getValues(true);
+    let serpentUpdated = Utils.updateSerpent(serpentObj);
 
-    calculate(key);
+    if (serpentUpdated === true) {
+        Utils.backToHomePage();
+    }
 }
