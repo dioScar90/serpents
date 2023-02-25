@@ -78,3 +78,16 @@ function editSerpent(e) {
         Utils.backToHomePage();
     }
 }
+
+function deleteSerpent(e) {
+    e.preventDefault();
+
+    // Continuar escrevendo aqui...
+    const formValues = new FormValues(e.target);
+    let serpentObj = formValues.getValues(true);
+    let serpentUpdated = Utils.updateSerpent(serpentObj);
+
+    if (serpentUpdated === true) {
+        Utils.backToHomePage();
+    }
+}

@@ -1,4 +1,4 @@
-const Template = createEnum(['Table','Header','Footer','Details']);
+const Template = createEnum(['Table','Header','Footer','Details', 'Edit', 'Create']);
 const Pages = createEnum(["index.html", "edit.html", "details.html", "delete.html", "create.html"]);
 
 class MountItem {
@@ -56,19 +56,8 @@ class MountItem {
 
     #mountCreate() {
         const createForm = document.querySelector("#create-form");
-        // const inputId = createForm.querySelector("#id");
-        // const inputPopularName = createForm.querySelector("#popular-name");
-        // const inputCientificName = createForm.querySelector("#cientific-name");
         const selectFamilyType = createForm.querySelector("#family-type");
-        // let serpent = Utils.getSerpentAfterJson(id);
         
-        // if (serpent === false)
-        //     return false;
-        
-        // inputId.value = id;
-        // inputPopularName.value = serpent.popularName;
-        // inputCientificName.value = serpent.cientificName;
-
         let families = Utils.getObjectKeysAsArray(Family);
         for (let i = 0; i < families.length; i++) {
             const option = document.createElement("option");
@@ -83,7 +72,7 @@ class MountItem {
 
     #mountDetails(id) {
         const details = document.querySelector("#dl-details");
-        const aEdit = document.querySelector("#edit");
+        const aEdit = document.querySelector("#a-edit");
         let serpent = Utils.getSerpentAfterJson(id);
         
         if (serpent === false)
@@ -125,6 +114,25 @@ class MountItem {
             selectFamilyType.append(option);
         }
         
+        return true;
+    }
+
+    #mountDelete(id) {
+        const details = document.querySelector("#dl-delete");
+        const inputId = document.querySelector("#id");
+        const aBack = document.querySelector("#a-back");
+        let serpent = Utils.getSerpentAfterJson(id);
+        
+        if (serpent === false)
+            return false;
+        
+        const allDd = details.querySelectorAll("dd");
+        allDd[0].innerHTML = serpent.popularName;
+        allDd[1].innerHTML = serpent.cientificName;
+        allDd[2].innerHTML = serpent.familyType;
+        inputId.value = id;
+        aBack.setAttribute("href", "index.html");
+    
         return true;
     }
 
@@ -189,16 +197,21 @@ class MountItem {
                 return this.#mountDetails(id);
             case enumTemplate.Edit :
                 return this.#mountEdit(id);
+            case enumTemplate.Delete :
+                return this.#mountDelete(id);
             default :
                 throw "Err 404";
         }
     }
+
+    getEnumTemplate = () => this.#enumTemplate;
 
     header = () => this.#mount(this.#enumTemplate.Header);
     footer = () => this.#mount(this.#enumTemplate.Footer);
     create = () => this.#mount(this.#enumTemplate.Create);
     details = (id) => this.#mount(this.#enumTemplate.Details, id);
     edit = (id) => this.#mount(this.#enumTemplate.Edit, id);
+    delete = (id) => this.#mount(this.#enumTemplate.Delete, id);
     table = () => this.#mount(this.#enumTemplate.Table);
 }
 
@@ -255,9 +268,15 @@ class Render {
             this.#backToHomePage(homePageUrl);
     }
 
-    #caseDelete(title) {
+    #caseDelete(title, actualUrl, homePageUrl) {
         this.#checkSessionLength();
         document.title = title;
+
+        let id = actualUrl.searchParams.get("id");
+        let detailsOk = this.#mountItem.delete(id);
+
+        if (detailsOk === false)
+            this.#backToHomePage(homePageUrl);
     }
 
     #caseCreate(title) {
@@ -286,7 +305,7 @@ class Render {
                 this.#caseDetails("Detalhes", this.#actualUrl, this.#homePageUrl);            
                 break;
             case enumPages.Delete :
-                this.#caseDelete("Remover serpente");
+                this.#caseDelete("Remover serpente", this.#actualUrl, this.#homePageUrl);
                 break;
             case enumPages.Create :
                 this.#caseCreate("Criar serpente");

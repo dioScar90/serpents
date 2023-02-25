@@ -22,7 +22,7 @@
 
                 <hr>
                 
-                <dl id="dl-details" class="row">
+                <dl id="dl-delete" class="row">
                     <dt class = "col-sm-2"> Nome Popular </dt>
                     <dd class = "col-sm-10"></dd>
 
@@ -33,11 +33,10 @@
                     <dd class = "col-sm-10"></dd>
                 </dl>
                 
-                <a id="edit"> Edit </a> | <a href="index.html"> Back to List </a>
-                <form asp-action="Delete">
-                    <input type="hidden" asp-for="Id">
+                <form action="" method="post" id="form-delete" onsubmit="deleteSerpent(event)">
+                    <input type="hidden" id="id" name="id">
                     <input type="submit" value="Delete" class="btn btn-danger"> |
-                    <a href="index.html"> Back to List </a>
+                    <a id="a-back"> Back to List </a>
                 </form>
             </div>
         </main>
