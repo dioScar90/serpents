@@ -13,16 +13,14 @@
     <div class="container">
         <main role="main" class="pb-3">
 
-            <h1> Create </h1>
-
-            <h4> Serpent </h4>
+            <h1> Adicionar serpente </h1>
 
             <hr>
 
             <div class="row">
                 <div class="col-md-4">
                     <form action="" method="post" id="create-form" onsubmit="startCreateNewSerpent(event)">
-                        <input type="hidden" id="id" name="id" value="">
+                        <input type="hidden" id="id" name="id" value="" placeholder="Ex.: ">
                         
                         <div class="form-group mb-3">
                             <label class="control-label" for="popular-name"> Nome Popular </label>
@@ -41,9 +39,24 @@
                             </select>
                         </div>
 
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input role="button" class="form-check-input" type="radio" name="medicalInterest" value="true" id="medical-interest-1" required>
+                                <label class="form-check-label" for="medical-interest-1">
+                                    Interesse médico
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input role="button" class="form-check-input" type="radio" name="medicalInterest" value="false" id="medical-interest-2">
+                                <label class="form-check-label" for="medical-interest-2">
+                                    Sem interesse médico
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <button type="button" class="btn btn-light" onclick="backToHomePage()"loadPage>
-                                <i class="fa-sharp fa-solid fa-backward"></i>&nbsp;Back to List
+                                <i class="fa-sharp fa-solid fa-backward"></i>&nbsp;Lista de serpentes
                             </button>
                             <button type="submit" form="create-form" class="btn btn-success">
                                 Save&nbsp;<i class="fa-sharp fa-solid fa-floppy-disk"></i>

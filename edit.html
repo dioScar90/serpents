@@ -13,9 +13,9 @@
     <div class="container">
         <main role="main" class="pb-3">
             
-            <h1> Edit </h1>
+            <h1> Editar </h1>
             
-            <h4> Serpent </h4>
+            <h4> Serpente </h4>
             
             <hr>
             
@@ -42,25 +42,27 @@
                             </select>
                         </div>
 
-                        <div class="form-check">
-                            <input role="button" class="form-check-input" type="radio" name="medicalInterest" value="true" id="medical-interest-1" required>
-                            <label class="form-check-label" for="medical-interest-1">
-                                Interesse médico
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input role="button" class="form-check-input" type="radio" name="medicalInterest" value="false" id="medical-interest-2">
-                            <label class="form-check-label" for="medical-interest-2">
-                                Sem interesse médico
-                            </label>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input role="button" class="form-check-input" type="radio" name="medicalInterest" value="true" id="medical-interest-1" required>
+                                <label class="form-check-label" for="medical-interest-1">
+                                    Interesse médico
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input role="button" class="form-check-input" type="radio" name="medicalInterest" value="false" id="medical-interest-2">
+                                <label class="form-check-label" for="medical-interest-2">
+                                    Sem interesse médico
+                                </label>
+                            </div>
                         </div>
                         
                         <div class="form-group">
                             <button type="button" class="btn btn-light" onclick="backToHomePage()"loadPage>
-                                <i class="fa-sharp fa-solid fa-backward"></i>&nbsp;Back to List
+                                <i class="fa-sharp fa-solid fa-backward"></i>&nbsp;Lista de serpentes
                             </button>
                             <button type="submit" form="edit-form" class="btn btn-success">
-                                Save&nbsp;<i class="fa-sharp fa-solid fa-floppy-disk"></i>
+                                Salvar&nbsp;<i class="fa-sharp fa-solid fa-floppy-disk"></i>
                             </button>
                         </div>
                     </form>

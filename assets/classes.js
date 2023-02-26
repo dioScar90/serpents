@@ -12,6 +12,62 @@ class Utils {
         }
         return Object.freeze(enumObject);
     }
+    
+    static #compareValues(a, b) {
+        // return -1/0/1 based on what you "know" a and b
+        // are here. Numbers, text, some custom case-insensitive
+        // and natural number ordering, etc. That's up to you.
+        // A typical "do whatever JS would do" is:
+        return (a < b) ? -1 : (a > b) ? 1 : 0;
+    }
+
+    /**
+     * This method I copied by this Stack Overflow's answer: https://stackoverflow.com/a/55462779
+     */
+    static sortTableByColumn(colNum) {  
+        const tableTbody = document.querySelector("table > tbody");
+        const thToConcatFontAwesome = document.querySelectorAll("tr > th");
+
+        // get all the rows in this table:
+        let rows = [...tableTbody.querySelectorAll("tr")];
+        
+        // set up the queryselector for getting the indicated
+        // column from a row, so we can compare using its value:
+        let qs = `td:nth-child(${colNum})`;
+        
+        // and then just... sort the rows:
+        rows.sort( (r1, r2) => {
+            // get each row's relevant column
+            let t1 = r1.querySelector(qs);
+            let t2 = r2.querySelector(qs);
+        
+            // and then effect sorting by comparing their content:
+            return this.#compareValues(t1.textContent, t2.textContent);
+        });
+        
+        // and then the magic part that makes the sorting appear on-page:
+        rows.forEach(row => tableTbody.append(row));
+
+        thToConcatFontAwesome[colNum - 1].innerHTML += `<i class="fa-sharp fa-solid fa-caret-up"></i>`;
+    }
+
+    static sortSerpentByPopularName(obj) {
+        obj.sort((a, b) => {
+            const nameA = a.popularName.toUpperCase(); // ignore upper and lowercase
+            const nameB = b.popularName.toUpperCase(); // ignore upper and lowercase
+            
+            if (nameA < nameB)
+                return -1;
+            
+            if (nameA > nameB)
+                return 1;
+            
+            // names must be equal
+            return 0;
+        });
+
+        return obj;
+    }
 
     static getIdWithZero(id) {
         let idWithZero = '0' + id;
@@ -96,7 +152,7 @@ class FormValues {
                 let keyAsNumber = +lastKey.split("serp_")[1];
                 val = ++keyAsNumber;
             }
-            this.#newObj[name] = val;
+            this.#newObj[name] = name == "medicalInterest" ? JSON.parse(val) : val;
         }
     }
 
@@ -111,16 +167,16 @@ class Serpent {
     #id;
     #popularName;
     #cientificName;
-    #familyType;
     #medicalInterest;
+    #familyType;
     #isActive;
 
-    constructor(popularName, cientificName, familyType, medicalInterest, serpentsArrayLength) {
+    constructor(popularName, cientificName, medicalInterest, familyType, serpentsArrayLength) {
         this.#id = ++serpentsArrayLength;
         this.#popularName = popularName;
         this.#cientificName = cientificName;
-        this.#familyType = familyType;
         this.#medicalInterest = medicalInterest;
+        this.#familyType = familyType;
         this.#isActive = true;
     }
 
@@ -189,10 +245,10 @@ class Serpentarium {
                     activeSerpents.push(serpent);
             });
 
-            return activeSerpents;
+            return Utils.sortSerpentByPopularName(activeSerpents);
         }
 
-        return this.#serpentsArray;
+        return Utils.sortSerpentByPopularName(this.#serpentsArray);
     }
 
     getSerpent(id = -1) {

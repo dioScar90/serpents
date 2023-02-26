@@ -11,19 +11,27 @@ class MountItem {
 
     #getNewTrThead() {
         const trThead = document.createElement('template');
-        trThead.innerHTML = `<tr> <th scope="row"> Nome Popular </th> <th scope="row"> Nome Científico </th> <th scope="row"> Família </th> <th scope="row"></th> </tr>`;
+        let trContent = '';
+        trContent +=    `<tr>`;
+        trContent +=        `<th class="align-middle" scope="row" role="button" onclick="sortTableByColumn(1)"> Nome Popular </th>`;
+        trContent +=        `<th class="align-middle" scope="row" role="button" onclick="sortTableByColumn(2)"> Nome Científico </th>`;
+        trContent +=        `<th class="align-middle" scope="row" role="button" onclick="sortTableByColumn(3)"> Família </th>`;
+        trContent +=        `<th class="align-middle" scope="row" role="button" onclick="sortTableByColumn(4)"> Interesse Médico </th>`;
+        trContent +=        `<th class="align-middle" scope="row"></th>`;
+        trContent +=    `</tr>`;
+        trThead.innerHTML = trContent;
         return trThead.content.firstElementChild;
     }
     
     #getNewTrTbody() {
         const trTbody = document.createElement('template');
-        let editContent = `Edit&nbsp;<i class="fa-sharp fa-solid fa-pen-to-square"></i>`;
-        let detailsContent = `Details&nbsp;<i class="fa-sharp fa-solid fa-circle-info"></i>`;
-        let deleteContent = `Delete&nbsp;<i class="fa-sharp fa-solid fa-trash"></i>`;
+        let editContent = `Editar&nbsp;<i class="fa-sharp fa-solid fa-pen-to-square"></i>`;
+        let detailsContent = `Detalhes&nbsp;<i class="fa-sharp fa-solid fa-circle-info"></i>`;
+        let deleteContent = `Remover&nbsp;<i class="fa-sharp fa-solid fa-trash"></i>`;
         let btnEdit = `<button type="button" class="btn btn-outline-warning btn-sm">${editContent}</button>`;
         let btnDetails = `<button type="button" class="btn btn-outline-info btn-sm">${detailsContent}</button>`;
         let btnDelete = `<button type="button" class="btn btn-outline-danger btn-sm">${deleteContent}</button>`;
-        trTbody.innerHTML = `<tr> <td></td> <td></td> <td></td> <td> ${btnEdit} ${btnDetails} ${btnDelete} </td> </tr>`;
+        trTbody.innerHTML = `<tr> <td class="align-middle"></td> <td class="align-middle"></td> <td class="align-middle"></td> <td class="align-middle"></td> <td class="align-middle"> ${btnEdit} ${btnDetails} ${btnDelete} </td> </tr>`;
         return trTbody.content.firstElementChild;
     }
 
@@ -84,7 +92,7 @@ class MountItem {
                 const tr = this.#getNewTrTbody();
                 const trLinks = tr.lastElementChild;
                 let id = Utils.getIdWithZero(serpent.id);
-    
+                
                 tr.children[0].innerHTML = serpent.popularName;
                 tr.children[1].innerHTML = serpent.cientificName;
                 tr.children[2].innerHTML = serpent.familyType;
@@ -95,15 +103,17 @@ class MountItem {
                 trLinks.children[2].setAttribute("onclick", `location.href='delete.html?id=${id}'`);
                 
                 tbody.append(tr);
-    
+                    
                 totalSerpents++;
             }
         }
+
+        Utils.sortTableByColumn(1);
     
         total.firstElementChild.innerHTML = totalSerpents;
     }
 
-    #mountCreate() {
+    #mountCreatePage() {
         const createForm = document.querySelector("#create-form");
         const selectFamilyType = createForm.querySelector("#family-type");
         
@@ -119,7 +129,7 @@ class MountItem {
         return true;
     }
 
-    #mountDetails(id) {
+    #mountDetailsPage(id) {
         const details = document.querySelector("#dl-details");
         const btnEdit = document.querySelector("#btn-edit");
         let serpent = Utils.getSerpentAfterJson(id);
@@ -137,13 +147,13 @@ class MountItem {
         return true;
     }
 
-    #mountEdit(id) {
+    #mountEditPage(id) {
         const editForm = document.querySelector("#edit-form");
         const inputId = editForm.querySelector("#id");
         const inputPopularName = editForm.querySelector("#popular-name");
         const inputCientificName = editForm.querySelector("#cientific-name");
         const selectFamilyType = editForm.querySelector("#family-type");
-        // const radioMedicalInterest = editForm.querySelector("#medical-interest");
+        const radioMedicalInterest = editForm.querySelectorAll("input[type=radio]");
         let serpent = Utils.getSerpentAfterJson(id);
         
         if (serpent === false)
@@ -152,6 +162,10 @@ class MountItem {
         inputId.value = id;
         inputPopularName.value = serpent.popularName;
         inputCientificName.value = serpent.cientificName;
+        if (serpent.medicalInterest === true)
+            radioMedicalInterest[0].checked = true;
+        else
+            radioMedicalInterest[1].checked = true;
 
         let families = Utils.getObjectKeysAsArray(Family);
         for (let i = 0; i < families.length; i++) {
@@ -168,7 +182,7 @@ class MountItem {
         return true;
     }
 
-    #mountDelete(id) {
+    #mountDeletePage(id) {
         const details = document.querySelector("#dl-delete");
         const inputId = document.querySelector("#id");
         let serpent = Utils.getSerpentAfterJson(id);
@@ -180,6 +194,7 @@ class MountItem {
         allDd[0].innerHTML = serpent.popularName;
         allDd[1].innerHTML = serpent.cientificName;
         allDd[2].innerHTML = serpent.familyType;
+        allDd[3].innerHTML = serpent.medicalInterest === true ? "Sim" : "Não";
         inputId.value = id;
     
         return true;
@@ -199,14 +214,14 @@ class MountItem {
                 this.#mountFooter();
                 break;
             case enumTemplate.Create :
-                this.#mountCreate();
+                this.#mountCreatePage();
                 break;
             case enumTemplate.Details :
-                return this.#mountDetails(id);
+                return this.#mountDetailsPage(id);
             case enumTemplate.Edit :
-                return this.#mountEdit(id);
+                return this.#mountEditPage(id);
             case enumTemplate.Delete :
-                return this.#mountDelete(id);
+                return this.#mountDeletePage(id);
             default :
                 throw "Err 404";
         }

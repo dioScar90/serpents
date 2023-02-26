@@ -57,6 +57,19 @@ function pushNewSerpent(serpent) {
     serpentarium.setNewSerpent(serpent);
 }
 
+function sortTableByColumn(colNum) {
+    const allTh = document.querySelectorAll("tr > th");
+
+    for (let i = 0; i < allTh.length - 1; i++) {
+        const iFontAwesome = allTh[i].querySelector("i");
+
+        if (iFontAwesome !== null)
+            iFontAwesome.remove();
+    }
+    
+    Utils.sortTableByColumn(colNum);
+}
+
 function startCreateNewSerpent(e) {
     e.preventDefault();
     
