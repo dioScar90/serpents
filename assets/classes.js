@@ -112,13 +112,15 @@ class Serpent {
     #popularName;
     #cientificName;
     #familyType;
+    #medicalInterest;
     #isActive;
 
-    constructor(popularName, cientificName, familyType, serpentsArrayLength) {
+    constructor(popularName, cientificName, familyType, medicalInterest, serpentsArrayLength) {
         this.#id = ++serpentsArrayLength;
         this.#popularName = popularName;
         this.#cientificName = cientificName;
         this.#familyType = familyType;
+        this.#medicalInterest = medicalInterest;
         this.#isActive = true;
     }
 
@@ -133,6 +135,9 @@ class Serpent {
     getFamilyType = () => this.#familyType;
     setFamilyType = (value) => this.#familyType = value;
 
+    getMedicalInterest = () => this.#medicalInterest;
+    setMedicalInterest = (condition) => this.#medicalInterest = condition;
+
     getIsActive = () => this.#isActive;
     deleteSerpent = () => this.#isActive = false;
 
@@ -143,6 +148,7 @@ class Serpent {
         obj.popularName = this.#popularName;
         obj.cientificName = this.#cientificName;
         obj.familyType = this.#familyType;
+        obj.medicalInterest = this.#medicalInterest;
         obj.isActive = this.#isActive;
 
         return obj;

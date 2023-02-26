@@ -22,6 +22,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <form action="" method="post" id="edit-form" onsubmit="startEditSerpent(event)">
+                    <!-- <form action="" id="edit-form" method="get"> -->
                         <input type="hidden" id="id" name="id" value="">
                         
                         <div class="form-group mb-3">
@@ -40,10 +41,27 @@
                                 <option class="d-none" value=""> -- Escolha -- </option>
                             </select>
                         </div>
+
+                        <div class="form-check">
+                            <input role="button" class="form-check-input" type="radio" name="medicalInterest" value="true" id="medical-interest-1" required>
+                            <label class="form-check-label" for="medical-interest-1">
+                                Interesse médico
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input role="button" class="form-check-input" type="radio" name="medicalInterest" value="false" id="medical-interest-2">
+                            <label class="form-check-label" for="medical-interest-2">
+                                Sem interesse médico
+                            </label>
+                        </div>
                         
                         <div class="form-group">
-                            <button type="button" class="btn btn-light" onclick="backToHomePage()"loadPage> Back to List </button>
-                            <button type="submit" form="edit-form" class="btn btn-success"> Save </button>
+                            <button type="button" class="btn btn-light" onclick="backToHomePage()"loadPage>
+                                <i class="fa-sharp fa-solid fa-backward"></i>&nbsp;Back to List
+                            </button>
+                            <button type="submit" form="edit-form" class="btn btn-success">
+                                Save&nbsp;<i class="fa-sharp fa-solid fa-floppy-disk"></i>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -57,10 +75,10 @@
 
     <footer class="border-top footer text-muted"></footer>
 
+    <script src="https://kit.fontawesome.com/c5b43aab05.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="assets/classes.js"></script>
     <script src="assets/functions.js"></script>
-    <script src="assets/session.js"></script>
     <script src="assets/render.js"></script>
 </body>
 </html>

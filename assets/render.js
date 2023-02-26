@@ -17,9 +17,12 @@ class MountItem {
     
     #getNewTrTbody() {
         const trTbody = document.createElement('template');
-        let btnEdit = `<button type="button" class="btn btn-outline-warning btn-sm"> Edit </button>`;
-        let btnDetails = `<button type="button" class="btn btn-outline-info btn-sm"> Details </button>`;
-        let btnDelete = `<button type="button" class="btn btn-outline-danger btn-sm"> Delete </button>`;
+        let editContent = `Edit&nbsp;<i class="fa-sharp fa-solid fa-pen-to-square"></i>`;
+        let detailsContent = `Details&nbsp;<i class="fa-sharp fa-solid fa-circle-info"></i>`;
+        let deleteContent = `Delete&nbsp;<i class="fa-sharp fa-solid fa-trash"></i>`;
+        let btnEdit = `<button type="button" class="btn btn-outline-warning btn-sm">${editContent}</button>`;
+        let btnDetails = `<button type="button" class="btn btn-outline-info btn-sm">${detailsContent}</button>`;
+        let btnDelete = `<button type="button" class="btn btn-outline-danger btn-sm">${deleteContent}</button>`;
         trTbody.innerHTML = `<tr> <td></td> <td></td> <td></td> <td> ${btnEdit} ${btnDetails} ${btnDelete} </td> </tr>`;
         return trTbody.content.firstElementChild;
     }
@@ -85,6 +88,7 @@ class MountItem {
                 tr.children[0].innerHTML = serpent.popularName;
                 tr.children[1].innerHTML = serpent.cientificName;
                 tr.children[2].innerHTML = serpent.familyType;
+                tr.children[3].innerHTML = serpent.medicalInterest === true ? "Sim" : "<strong>Não<strong>";
                 
                 trLinks.children[0].setAttribute("onclick", `location.href='edit.html?id=${id}'`);
                 trLinks.children[1].setAttribute("onclick", `location.href='details.html?id=${id}'`);
@@ -127,6 +131,7 @@ class MountItem {
         allDd[0].innerHTML = serpent.popularName;
         allDd[1].innerHTML = serpent.cientificName;
         allDd[2].innerHTML = serpent.familyType;
+        allDd[3].innerHTML = serpent.medicalInterest === true ? "Sim" : "Não";
         btnEdit.setAttribute("onclick", `location.href='edit.html?id=${id}'`);
     
         return true;
@@ -138,6 +143,7 @@ class MountItem {
         const inputPopularName = editForm.querySelector("#popular-name");
         const inputCientificName = editForm.querySelector("#cientific-name");
         const selectFamilyType = editForm.querySelector("#family-type");
+        // const radioMedicalInterest = editForm.querySelector("#medical-interest");
         let serpent = Utils.getSerpentAfterJson(id);
         
         if (serpent === false)
@@ -165,7 +171,6 @@ class MountItem {
     #mountDelete(id) {
         const details = document.querySelector("#dl-delete");
         const inputId = document.querySelector("#id");
-        const aBack = document.querySelector("#a-back");
         let serpent = Utils.getSerpentAfterJson(id);
         
         if (serpent === false)
@@ -176,7 +181,6 @@ class MountItem {
         allDd[1].innerHTML = serpent.cientificName;
         allDd[2].innerHTML = serpent.familyType;
         inputId.value = id;
-        aBack.setAttribute("href", "index.html");
     
         return true;
     }
@@ -245,7 +249,7 @@ class Render {
         document.title = title;
 
         if (window.sessionStorage.length == 0)
-            inicializeSerpents();
+            initializeSerpents();
         
         this.#mountItem.table();
     }
