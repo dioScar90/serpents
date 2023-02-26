@@ -22,6 +22,7 @@ function inicializeSerpents() {
         ["Mamba-verde-oriental", "Dendroaspis angusticeps", Family.Elapidae],
         ["Naja-cuspideira", "Hemachatus haemachatus", Family.Elapidae],
         ["Naja-egípcia", "Naja haje", Family.Elapidae],
+        ["Naja-de-monóculo", "Naja kaouthia", Family.Elapidae],
         ["Víbora-do-gabão", "Bitis gabonica", Family.Viperidae],
         ["Periquitamboia", "Corallus caninus", Family.Boidae],
         ["Cobra-verde", "Liophis typhlus", Family.Dipsadidae],
@@ -37,13 +38,13 @@ function inicializeSerpents() {
         ["Cobra-verde", "Philodryas olfersii", Family.Colubridae]
     ];
 
-    let serpentario = new Serpentario();
+    let serpentarium = new Serpentarium();
     serpentsToPush.forEach((serpent) => {
-        const lenSerp = serpentario.getAllSerpents().length > 0 ? serpentario.getAllSerpents().at(-1).getId() : 0;
-        serpentario.setNewSerpent(new Serpent(serpent[0], serpent[1], serpent[2], lenSerp));
+        const lenSerp = serpentarium.getAllSerpents().length > 0 ? serpentarium.getAllSerpents().at(-1).getId() : 0;
+        serpentarium.setNewSerpent(new Serpent(serpent[0], serpent[1], serpent[2], lenSerp));
     });
     
-    serpentario.getAllSerpents().forEach((serpent) => {
+    serpentarium.getAllSerpents().forEach((serpent) => {
         console.log("Id: " + serpent.getId() + "\n" +
         "Nome popular: " + serpent.getPopularName() + "\n" +
         "Nome científico: " + serpent.getCientificName() + "\n" +
@@ -52,10 +53,10 @@ function inicializeSerpents() {
 }
 
 function pushNewSerpent(serpent) {
-    serpentario.setNewSerpent(serpent);
+    serpentarium.setNewSerpent(serpent);
 }
 
-function createNewSerpent(e) {
+function startCreateNewSerpent(e) {
     e.preventDefault();
     
     const formValues = new FormValues(e.target);
@@ -67,11 +68,11 @@ function createNewSerpent(e) {
     }
 }
 
-function editSerpent(e) {
+function startEditSerpent(e) {
     e.preventDefault();
 
     const formValues = new FormValues(e.target);
-    let serpentObj = formValues.getValues(true);
+    let serpentObj = formValues.getValues();
     let serpentUpdated = Utils.updateSerpent(serpentObj);
 
     if (serpentUpdated === true) {
@@ -79,15 +80,17 @@ function editSerpent(e) {
     }
 }
 
-function deleteSerpent(e) {
+function startDeleteSerpent(e) {
     e.preventDefault();
-
-    // Continuar escrevendo aqui...
+    
     const formValues = new FormValues(e.target);
-    let serpentObj = formValues.getValues(true);
-    let serpentUpdated = Utils.updateSerpent(serpentObj);
+    let serpentObj = formValues.getValues();
+    let serpentUpdated = Utils.deleteSerpent(serpentObj.id);
 
     if (serpentUpdated === true) {
         Utils.backToHomePage();
     }
 }
+
+const backToHomePage = () => Utils.backToHomePage();
+const goToPage = (pageName) => Utils.goToPage(pageName);

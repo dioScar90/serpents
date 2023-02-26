@@ -1,4 +1,18 @@
 class Utils {
+    static createEnum(values) {
+        const enumObject = {};
+        for (const val of values) {
+            let name = val;
+            if (val.search(`.`) > -1) {
+                let correctName = val.split(`.`)[0];
+                name = correctName[0].charAt(0).toUpperCase() + correctName.slice(1).toLowerCase();
+            }
+            
+            enumObject[name] = val;
+        }
+        return Object.freeze(enumObject);
+    }
+
     static getIdWithZero(id) {
         let idWithZero = '0' + id;
         return idWithZero.slice(-2);
@@ -33,6 +47,22 @@ class Utils {
             success = true;
         } catch (e) {
             console.log(e);
+        }   
+
+        return success;
+    }
+
+    static deleteSerpent(id) {
+        let success = false;
+
+        try {
+            let serpId = "serp_" + this.getIdWithZero(id);
+            let serpentToDelete = this.getSerpentAfterJson(serpId, true);
+            serpentToDelete.isActive = false;
+            window.sessionStorage.setItem(serpId, JSON.stringify(serpentToDelete));
+            success = true;
+        } catch (e) {
+            console.log(e);
         }
 
         return success;
@@ -40,12 +70,13 @@ class Utils {
 
     static getObjectKeysAsArray = (obj) => Object.keys(obj);
 
-    static reloadPage = (pageUrl) => window.location = pageUrl;
+    static loadPage = (pageUrl) => window.location = pageUrl;
     static getActualUrl = () => new URL(location.href);
     static getFileName = (actualUrl) => actualUrl.pathname.split(`/`).at(-1);
     static getPageUrl = (actualUrl, pageName) => actualUrl.pathname.substring(0, actualUrl.pathname.lastIndexOf(`/`) + 1) + pageName;
     static getHomePageUrl = (actualUrl) => this.getPageUrl(actualUrl, "index.html");
     static backToHomePage = () => window.location = this.getHomePageUrl(this.getActualUrl());
+    static goToPage = (pageName) => this.loadPage(this.getPageUrl(this.getActualUrl(), pageName));
 }
 
 class FormValues {
@@ -118,7 +149,7 @@ class Serpent {
     }
 }
 
-class Serpentario {
+class Serpentarium {
     #serpentsArray;
 
     constructor() {
@@ -132,11 +163,11 @@ class Serpentario {
             if (serpent.getId() == id) {
                 if (onlyActives === true) {
                     idxToReturn = serpent.getIsActive() === true ? idx : false;
-                    return;
+                    return idxToReturn;
                 }
                 
                 idxToReturn = idx;
-                return;
+                return idxToReturn;
             }
         });
 
@@ -167,40 +198,12 @@ class Serpentario {
         this.#serpentsArray.push(serpent);
         
         let serpId = "serp_" + Utils.getIdWithZero(serpent.getId());
-        let serpData = JSON.stringify(serpent.getSerpentAsAnObjectToJson());
         let isSerpentAlreadySetted = window.sessionStorage.getItem(serpId);
 
         if (isSerpentAlreadySetted !== false && isSerpentAlreadySetted !== null)
             throw "Serpent is already setted on sessionStorage()";
-        
-        window.sessionStorage.setItem(serpId, serpData);
-    }
-    
-    deleteSerpent(id = -1) {
-        const indexToDelete = id == -1 ? id : this.#findSerpent(id, true);
 
-        if (indexToDelete === false)
-            throw "Serpent doesn't exist or had been already deleted.";
-        
-        this.#serpentsArray.at(indexToDelete).deleteSerpent();
-        
-        let serpId = "serp_" + Utils.getIdWithZero(this.#serpentsArray.at(indexToDelete).getId());
-        let serpData = JSON.stringify(false);
+        let serpData = JSON.stringify(serpent.getSerpentAsAnObjectToJson());
         window.sessionStorage.setItem(serpId, serpData);
     }
 }
-
-function createEnum(values) {
-    const enumObject = {};
-    for (const val of values) {
-        let name = val;
-        if (val.search(`.`) > -1) {
-            let correctName = val.split(`.`)[0];
-            name = correctName[0].charAt(0).toUpperCase() + correctName.slice(1).toLowerCase();
-        }
-        
-        enumObject[name] = val;
-    }
-    return Object.freeze(enumObject);
-}
-const Family = createEnum(['Boidae','Viperidae','Elapidae','Colubridae','Dipsadidae','Pythonidae']);

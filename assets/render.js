@@ -1,5 +1,6 @@
-const Template = createEnum(['Table','Header','Footer','Details', 'Edit', 'Create']);
-const Pages = createEnum(["index.html", "edit.html", "details.html", "delete.html", "create.html"]);
+const Family = Utils.createEnum(['Boidae','Viperidae','Elapidae','Colubridae','Dipsadidae','Pythonidae']);
+const Template = Utils.createEnum(['Table','Header','Footer','Details', 'Edit', 'Create']);
+const Pages = Utils.createEnum(["index.html", "edit.html", "details.html", "delete.html", "create.html"]);
 
 class MountItem {
     #enumTemplate;
@@ -10,13 +11,16 @@ class MountItem {
 
     #getNewTrThead() {
         const trThead = document.createElement('template');
-        trThead.innerHTML = `<tr> <th> Nome Popular </th> <th> Nome Científico </th> <th> Família </th> <th></th> </tr>`;
+        trThead.innerHTML = `<tr> <th scope="row"> Nome Popular </th> <th scope="row"> Nome Científico </th> <th scope="row"> Família </th> <th scope="row"></th> </tr>`;
         return trThead.content.firstElementChild;
     }
     
     #getNewTrTbody() {
         const trTbody = document.createElement('template');
-        trTbody.innerHTML = `<tr> <td></td> <td></td> <td></td> <td> <a>Edit</a> | <a>Details</a> | <a>Delete</a> </td> </tr>`;
+        let btnEdit = `<button type="button" class="btn btn-outline-warning btn-sm"> Edit </button>`;
+        let btnDetails = `<button type="button" class="btn btn-outline-info btn-sm"> Details </button>`;
+        let btnDelete = `<button type="button" class="btn btn-outline-danger btn-sm"> Delete </button>`;
+        trTbody.innerHTML = `<tr> <td></td> <td></td> <td></td> <td> ${btnEdit} ${btnDetails} ${btnDelete} </td> </tr>`;
         return trTbody.content.firstElementChild;
     }
 
@@ -54,6 +58,47 @@ class MountItem {
         `;
     }
 
+    #mountTable() {
+        let sessionKeys = Utils.getObjectKeysAsArray(window.sessionStorage).sort();
+        let totalSerpents = 0;
+    
+        if (sessionKeys.length == 0)
+            return;
+        
+        const thead = document.querySelector("thead");
+        thead.innerHTML = '';
+        const tbody = document.querySelector("tbody");
+        tbody.innerHTML = '';
+        const total = document.querySelector("#total");
+    
+        const trThead = this.#getNewTrThead();
+        thead.append(trThead);
+        
+        for (let i = 0; i < sessionKeys.length; i++) {
+            let serpent = Utils.getSerpentAfterJson(sessionKeys[i], true);
+            
+            if (serpent.isActive !== false) {
+                const tr = this.#getNewTrTbody();
+                const trLinks = tr.lastElementChild;
+                let id = Utils.getIdWithZero(serpent.id);
+    
+                tr.children[0].innerHTML = serpent.popularName;
+                tr.children[1].innerHTML = serpent.cientificName;
+                tr.children[2].innerHTML = serpent.familyType;
+                
+                trLinks.children[0].setAttribute("onclick", `location.href='edit.html?id=${id}'`);
+                trLinks.children[1].setAttribute("onclick", `location.href='details.html?id=${id}'`);
+                trLinks.children[2].setAttribute("onclick", `location.href='delete.html?id=${id}'`);
+                
+                tbody.append(tr);
+    
+                totalSerpents++;
+            }
+        }
+    
+        total.firstElementChild.innerHTML = totalSerpents;
+    }
+
     #mountCreate() {
         const createForm = document.querySelector("#create-form");
         const selectFamilyType = createForm.querySelector("#family-type");
@@ -72,7 +117,7 @@ class MountItem {
 
     #mountDetails(id) {
         const details = document.querySelector("#dl-details");
-        const aEdit = document.querySelector("#a-edit");
+        const btnEdit = document.querySelector("#btn-edit");
         let serpent = Utils.getSerpentAfterJson(id);
         
         if (serpent === false)
@@ -82,7 +127,7 @@ class MountItem {
         allDd[0].innerHTML = serpent.popularName;
         allDd[1].innerHTML = serpent.cientificName;
         allDd[2].innerHTML = serpent.familyType;
-        aEdit.setAttribute("href", `edit.html?id=${id}`);
+        btnEdit.setAttribute("onclick", `location.href='edit.html?id=${id}'`);
     
         return true;
     }
@@ -134,47 +179,6 @@ class MountItem {
         aBack.setAttribute("href", "index.html");
     
         return true;
-    }
-
-    #mountTable() {
-        let sessionKeys = Utils.getObjectKeysAsArray(window.sessionStorage).sort();
-        let totalSerpents = 0;
-    
-        if (sessionKeys.length == 0)
-            return;
-        
-        const thead = document.querySelector("#thead");
-        thead.innerHTML = '';
-        const tbody = document.querySelector("#tbody");
-        tbody.innerHTML = '';
-        const total = document.querySelector("#total");
-    
-        const trThead = this.#getNewTrThead();
-        thead.append(trThead);
-        
-        for (let i = 0; i < sessionKeys.length; i++) {
-            let serpent = Utils.getSerpentAfterJson(sessionKeys[i], true);
-            
-            if (serpent !== false) {
-                const tr = this.#getNewTrTbody();
-                const trLinks = tr.lastElementChild;
-                let id = Utils.getIdWithZero(serpent.id);
-    
-                tr.children[0].innerHTML = serpent.popularName;
-                tr.children[1].innerHTML = serpent.cientificName;
-                tr.children[2].innerHTML = serpent.familyType;
-                
-                trLinks.children[0].setAttribute("href", `edit.html?id=${id}`);
-                trLinks.children[1].setAttribute("href", `details.html?id=${id}`);
-                trLinks.children[2].setAttribute("href", `delete.html?id=${id}`);
-                
-                tbody.append(tr);
-    
-                totalSerpents++;
-            }
-        }
-    
-        total.firstElementChild.innerHTML = totalSerpents;
     }
 
     #mount(type, id = false) {
@@ -230,7 +234,7 @@ class Render {
         this.#mountItem = mountItem;
     }
 
-    #backToHomePage = (homePageUrl) => Utils.reloadPage(homePageUrl);
+    #backToHomePage = (homePageUrl) => Utils.loadPage(homePageUrl);
 
     #checkSessionLength() {
         if (window.sessionStorage.length == 0)
@@ -316,13 +320,17 @@ class Render {
     }
 }
 
-window.onload = function() {
+function afterLoad() {
     let actualUrl = Utils.getActualUrl();
     let fileName = Utils.getFileName(actualUrl);
     let homePageUrl = Utils.getHomePageUrl(actualUrl);
-
+    
     const mountItem = new MountItem(Template);
     const render = new Render(actualUrl, fileName, homePageUrl, Pages, mountItem);
-
+    
     render.renderPage();
+    
+    console.log("Carregou aqui");
 }
+
+window.onload = setTimeout(afterLoad, 50);
