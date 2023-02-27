@@ -1,3 +1,5 @@
+var firstTimeOnThePlane = false;
+
 class Utils {
     static createEnum(values) {
         const enumObject = {};
@@ -13,18 +15,21 @@ class Utils {
         return Object.freeze(enumObject);
     }
     
-    static #compareValues(a, b) {
+    static #compareValues(a, b, asc) {
         // return -1/0/1 based on what you "know" a and b
         // are here. Numbers, text, some custom case-insensitive
         // and natural number ordering, etc. That's up to you.
         // A typical "do whatever JS would do" is:
-        return (a < b) ? -1 : (a > b) ? 1 : 0;
+        if (asc === true)
+            return (a < b) ? -1 : (a > b) ? 1 : 0;
+        return (a > b) ? -1 : (a < b) ? 1 : 0;
     }
 
     /**
      * This method I copied by this Stack Overflow's answer: https://stackoverflow.com/a/55462779
+     * I just added the 'asc' parameter and the second return at #compareValues();
      */
-    static sortTableByColumn(colNum) {  
+    static sortTableByColumn(colNum, asc = true) {  
         const tableTbody = document.querySelector("table > tbody");
         const thToConcatFontAwesome = document.querySelectorAll("tr > th");
 
@@ -42,33 +47,16 @@ class Utils {
             let t2 = r2.querySelector(qs);
         
             // and then effect sorting by comparing their content:
-            return this.#compareValues(t1.textContent, t2.textContent);
+            return this.#compareValues(t1.textContent, t2.textContent, asc);
         });
         
         // and then the magic part that makes the sorting appear on-page:
         rows.forEach(row => tableTbody.append(row));
-
-        thToConcatFontAwesome[colNum - 1].innerHTML += `<i class="fa-sharp fa-solid fa-caret-up"></i>`;
+        
+        let iContent = asc === true ? `<i class="fa-sharp fa-solid fa-caret-up"></i>` : `<i class="fa-sharp fa-solid fa-caret-down"></i>`;
+        thToConcatFontAwesome[colNum - 1].innerHTML += iContent;
     }
-
-    static sortSerpentByPopularName(obj) {
-        obj.sort((a, b) => {
-            const nameA = a.popularName.toUpperCase(); // ignore upper and lowercase
-            const nameB = b.popularName.toUpperCase(); // ignore upper and lowercase
-            
-            if (nameA < nameB)
-                return -1;
-            
-            if (nameA > nameB)
-                return 1;
-            
-            // names must be equal
-            return 0;
-        });
-
-        return obj;
-    }
-
+    
     static getIdWithZero(id) {
         let idWithZero = '0' + id;
         return idWithZero.slice(-2);
@@ -122,6 +110,27 @@ class Utils {
         }
 
         return success;
+    }
+
+    static deleteAllSerpents() {
+        let allSerpentDeleted = false;
+
+        try {
+            let sessionKeys = this.getObjectKeysAsArray(window.sessionStorage);
+            for (let i = 0; i < sessionKeys.length; i++) {
+                let serpent = Utils.getSerpentAfterJson(sessionKeys[i], true);
+                
+                if (serpent.isActive === true) {
+                    serpent.isActive = false;
+                    window.sessionStorage.setItem(sessionKeys[i], JSON.stringify(serpent));
+                }
+            }
+            allSerpentDeleted = true;
+        } catch (e) {
+            console.log(e);
+        }
+
+        return allSerpentDeleted;
     }
 
     static getObjectKeysAsArray = (obj) => Object.keys(obj);
@@ -245,10 +254,10 @@ class Serpentarium {
                     activeSerpents.push(serpent);
             });
 
-            return Utils.sortSerpentByPopularName(activeSerpents);
+            return activeSerpents;
         }
 
-        return Utils.sortSerpentByPopularName(this.#serpentsArray);
+        return this.#serpentsArray;
     }
 
     getSerpent(id = -1) {

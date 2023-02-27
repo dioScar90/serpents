@@ -14,7 +14,7 @@
         <main role="main" class="pb-3">
             <h1> Serpentes a bordo </h1>
             
-            <div class="row mx-0">
+            <div class="row mx-0 mb-3">
                 <div class="col-4 px-0"></div>
                 <div class="col-4 px-0 d-flex justify-content-center align-items-center">
                     <button type="button" class="btn btn-primary" onclick="goToPage('create.html')" title="Se você é um dos criminosos e deseja adicionar mais uma maldita serpente nesse maldito avião, clique aqui.">
@@ -26,10 +26,24 @@
                 </div>
             </div>
             
-            <table class="table table-striped mt-3 table-dark">
+            <table class="table table-striped table-dark">
                 <thead></thead>
                 <tbody></tbody>
             </table>
+
+            <div id="info-airplane-saved" class="d-none">
+                <div class="alert alert-success text-center" role="alert">
+                    <h3 class="fw-bold"> Atenção </h3>
+                    <hr>
+                    <h5 class="fw-bold"> Não há mais nenhuma serpente a bordo. Você ajudou a salvar esse bendito avião. :) Obrigado. </h5>
+                </div>
+            </div>
+            
+            <div class="px-0 d-flex justify-content-center align-items-center">
+                <button type="button" class="btn btn-danger" onclick="location.href='delete.html?id=all'" title="Se você é um dos criminosos e deseja adicionar mais uma maldita serpente nesse maldito avião, clique aqui.">
+                    Acabar com todas as serpentes de uma vez por todas e de uma vez só.&nbsp;<i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
         </main>
     </div>
 

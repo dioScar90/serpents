@@ -1,5 +1,3 @@
-const myModal = document.querySelector('#my-modal');
-
 function initializeSerpents() {
     let serpentsToPush = [
         ["Surucucu", "Lachesis muta", true, Family.Viperidae],
@@ -53,6 +51,8 @@ function initializeSerpents() {
         "Interesse médico: " + (serpent.getMedicalInterest() === true ? "sim" : "não") + "\n" +
         "Família: " + serpent.getFamilyType() + "\n");
     });
+
+    firstTimeOnThePlane = true;
 }
 
 function pushNewSerpent(serpent) {
@@ -61,15 +61,19 @@ function pushNewSerpent(serpent) {
 
 function sortTableByColumn(colNum) {
     const allTh = document.querySelectorAll("tr > th");
+    let asc = allTh[colNum - 1].toggleAttribute("data-order-by");
 
     for (let i = 0; i < allTh.length - 1; i++) {
         const iFontAwesome = allTh[i].querySelector("i");
 
         if (iFontAwesome !== null)
             iFontAwesome.remove();
+
+        if (i + 1 != colNum)
+            allTh[i].removeAttribute("data-order-by");
     }
     
-    Utils.sortTableByColumn(colNum);
+    Utils.sortTableByColumn(colNum, asc);
 }
 
 function startCreateNewSerpent(e) {
@@ -103,31 +107,26 @@ function startDeleteSerpent(e) {
     let serpentObj = formValues.getValues();
     let serpentUpdated = Utils.deleteSerpent(serpentObj.id);
 
-    if (serpentUpdated === true) {
+    if (serpentUpdated === true)
         Utils.backToHomePage();
-    }
+}
+
+function startDeleteAllSerpents(e) {
+    e.preventDefault();
+
+    let allSerpentDeleted = Utils.deleteAllSerpents();
+
+    if (allSerpentDeleted === true)
+        Utils.backToHomePage();
 }
 
 const backToHomePage = () => Utils.backToHomePage();
 const goToPage = (pageName) => Utils.goToPage(pageName);
-
-function afterLoad() {
-    let actualUrl = Utils.getActualUrl();
-    let fileName = Utils.getFileName(actualUrl);
-    let homePageUrl = Utils.getHomePageUrl(actualUrl);
-    
-    const mountItem = new MountItem(Template);
-    const render = new Render(actualUrl, fileName, homePageUrl, Pages, mountItem);
-    
-    render.renderPage();
-
-    // const myModal = document.querySelector('#my-modal');
-    // myModal.showModal();
-    
-    console.log("Carregou aqui");
-}
+const closeModal = () => document.querySelector("#my-modal").close();
 
 function ifModalClick(e) {
+    const myModal = document.querySelector("#my-modal");
+
     let position = myModal.getBoundingClientRect();
     let backdropTop = position.top;
     let backdropBottom = position.bottom;
@@ -140,5 +139,21 @@ function ifModalClick(e) {
     
     myModal.close();
 };
+
+function afterLoad() {
+    let actualUrl = Utils.getActualUrl();
+    let fileName = Utils.getFileName(actualUrl);
+    let homePageUrl = Utils.getHomePageUrl(actualUrl);
+    
+    const mountItem = new MountItem(Template);
+    const render = new Render(actualUrl, fileName, homePageUrl, Pages, mountItem);
+    render.renderPage();
+
+    if (firstTimeOnThePlane === true)
+        mountItem.mountDialog();
+    
+    console.log("Carregou aqui");
+}
+
 
 window.onload = setTimeout(afterLoad, 50);

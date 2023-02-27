@@ -44,6 +44,17 @@
                     </button>
                 </form>
             </div>
+
+            <div id="remover-todas" class="d-none">
+                <form action="" method="post" id="form-delete" onsubmit="startDeleteAllSerpents(event)">
+                    <button type="button" class="btn btn-light" onclick="backToHomePage()" title="Voltar para ver todas as malditas serpentes presentes nesse maldito avião.">
+                        <i class="fa-sharp fa-solid fa-backward"></i>&nbsp;Lista de serpentes
+                    </button>
+                    <button type="submit" class="btn btn-outline-danger btn-lg" id="btn-edit">
+                        Acabar com <span class="fw-bold">TODAS</span>&nbsp;<i class="fa-solid fa-trash"></i>
+                    </button>
+                </form>
+            </div>
         </main>
     </div>
 
