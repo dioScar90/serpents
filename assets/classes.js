@@ -189,21 +189,22 @@ class Serpent {
         this.#isActive = true;
     }
 
-    getId = () => this.#id;
+    get id() { return this.#id; }
 
-    getPopularName = () => this.#popularName;
-    setPopularName = (value) => this.#popularName = value;
+    get popularName() { return this.#popularName; }
+    set popularName(value) { this.#popularName = value; }
 
-    getCientificName = () => this.#cientificName;
-    setCientificName = (value) => this.#cientificName = value;
+    get cientificName() { return this.#cientificName; }
+    set cientificName(value) { this.#cientificName = value; }
 
-    getFamilyType = () => this.#familyType;
-    setFamilyType = (value) => this.#familyType = value;
+    get familyType() { return this.#familyType; }
+    set familyType(value) { this.#familyType = value; }
 
-    getMedicalInterest = () => this.#medicalInterest;
-    setMedicalInterest = (condition) => this.#medicalInterest = condition;
+    get medicalInterest() { return this.#medicalInterest; }
+    set medicalInterest(condition) { this.#medicalInterest = condition; }
 
-    getIsActive = () => this.#isActive;
+    get isActive() { return this.#isActive; }
+
     deleteSerpent = () => this.#isActive = false;
 
     getSerpentAsAnObjectToJson() {
@@ -231,9 +232,9 @@ class Serpentarium {
         let idxToReturn = false;
 
         this.#serpentsArray.forEach((serpent, idx) => {
-            if (serpent.getId() == id) {
+            if (serpent.id == id) {
                 if (onlyActives === true) {
-                    idxToReturn = serpent.getIsActive() === true ? idx : false;
+                    idxToReturn = serpent.isActive === true ? idx : false;
                     return idxToReturn;
                 }
                 
@@ -250,7 +251,7 @@ class Serpentarium {
             let activeSerpents = [];
 
             this.#serpentsArray.forEach((serpent) => {
-                if (serpent.getIsActive() === true)
+                if (serpent.isActive === true)
                     activeSerpents.push(serpent);
             });
 
@@ -268,7 +269,7 @@ class Serpentarium {
     setNewSerpent(serpent) {
         this.#serpentsArray.push(serpent);
         
-        let serpId = "serp_" + Utils.getIdWithZero(serpent.getId());
+        let serpId = "serp_" + Utils.getIdWithZero(serpent.id);
         let isSerpentAlreadySetted = window.sessionStorage.getItem(serpId);
 
         if (isSerpentAlreadySetted !== false && isSerpentAlreadySetted !== null)

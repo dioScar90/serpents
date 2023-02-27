@@ -21,7 +21,6 @@ function initializeSerpents() {
         ["Mamba-negra", "Dendroaspis polylepis", true, Family.Elapidae],
         ["Mamba-verde-oriental", "Dendroaspis angusticeps", true, Family.Elapidae],
         ["Naja-cuspideira", "Hemachatus haemachatus", true, Family.Elapidae],
-        ["Naja-egípcia", "Naja haje", true, Family.Elapidae],
         ["Naja-de-monóculo", "Naja kaouthia", true, Family.Elapidae],
         ["Víbora-do-gabão", "Bitis gabonica", true, Family.Viperidae],
         ["Periquitamboia", "Corallus caninus", false, Family.Boidae],
@@ -40,16 +39,16 @@ function initializeSerpents() {
 
     let serpentarium = new Serpentarium();
     serpentsToPush.forEach((serpent) => {
-        const lenSerp = serpentarium.getAllSerpents().length > 0 ? serpentarium.getAllSerpents().at(-1).getId() : 0;
+        const lenSerp = serpentarium.getAllSerpents().length > 0 ? serpentarium.getAllSerpents().at(-1).id : 0;
         serpentarium.setNewSerpent(new Serpent(serpent[0], serpent[1], serpent[2], serpent[3], lenSerp));
     });
     
     serpentarium.getAllSerpents().forEach((serpent) => {
-        console.log("Id: " + serpent.getId() + "\n" +
-        "Nome popular: " + serpent.getPopularName() + "\n" +
-        "Nome científico: " + serpent.getCientificName() + "\n" +
-        "Interesse médico: " + (serpent.getMedicalInterest() === true ? "sim" : "não") + "\n" +
-        "Família: " + serpent.getFamilyType() + "\n");
+        console.log("Id: " + serpent.id + "\n" +
+        "Nome popular: " + serpent.popularName + "\n" +
+        "Nome científico: " + serpent.cientificName + "\n" +
+        "Interesse médico: " + (serpent.medicalInterest === true ? "sim" : "não") + "\n" +
+        "Família: " + serpent.familyType + "\n");
     });
 
     firstTimeOnThePlane = true;
@@ -63,14 +62,16 @@ function sortTableByColumn(colNum) {
     const allTh = document.querySelectorAll("tr > th");
     let asc = allTh[colNum - 1].toggleAttribute("data-order-by");
 
-    for (let i = 0; i < allTh.length - 1; i++) {
-        const iFontAwesome = allTh[i].querySelector("i");
+    for (let i = 0; i < allTh.length; i++) {
+        if (i != 1) {
+            const iFontAwesome = allTh[i].querySelector("i");
 
-        if (iFontAwesome !== null)
-            iFontAwesome.remove();
+            if (iFontAwesome !== null)
+                iFontAwesome.remove();
 
-        if (i + 1 != colNum)
-            allTh[i].removeAttribute("data-order-by");
+            if (i + 1 != colNum)
+                allTh[i].removeAttribute("data-order-by");
+        }
     }
     
     Utils.sortTableByColumn(colNum, asc);
