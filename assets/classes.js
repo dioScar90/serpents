@@ -53,7 +53,7 @@ class Utils {
         // and then the magic part that makes the sorting appear on-page:
         rows.forEach(row => tableTbody.append(row));
         
-        let iContent = asc === true ? `<i class="fa-sharp fa-solid fa-caret-up"></i>` : `<i class="fa-sharp fa-solid fa-caret-down"></i>`;
+        let iContent = asc === true ? `<i class="fa-solid fa-arrow-up-short-wide"></i>` : `<i class="fa-solid fa-arrow-down-short-wide"></i>`;
         thToConcatFontAwesome[colNum - 1].innerHTML += iContent;
     }
     

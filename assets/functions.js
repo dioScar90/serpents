@@ -58,9 +58,9 @@ function pushNewSerpent(serpent) {
     serpentarium.setNewSerpent(serpent);
 }
 
-function sortTableByColumn(colNum) {
+function sortTableByColumn(cellIndex) {
     const allTh = document.querySelectorAll("tr > th");
-    let asc = allTh[colNum - 1].toggleAttribute("data-order-by");
+    let asc = allTh[cellIndex].toggleAttribute("data-order-by");
 
     for (let i = 0; i < allTh.length; i++) {
         if (i != 1) {
@@ -69,12 +69,12 @@ function sortTableByColumn(colNum) {
             if (iFontAwesome !== null)
                 iFontAwesome.remove();
 
-            if (i + 1 != colNum)
+            if (i != cellIndex)
                 allTh[i].removeAttribute("data-order-by");
         }
     }
     
-    Utils.sortTableByColumn(colNum, asc);
+    Utils.sortTableByColumn(cellIndex + 1, asc);
 }
 
 function startCreateNewSerpent(e) {
@@ -94,6 +94,7 @@ function startEditSerpent(e) {
 
     const formValues = new FormValues(e.target);
     let serpentObj = formValues.getValues();
+    serpentObj.id = +serpentObj.id;
     let serpentUpdated = Utils.updateSerpent(serpentObj);
 
     if (serpentUpdated === true) {

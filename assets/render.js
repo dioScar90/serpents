@@ -13,11 +13,11 @@ class MountItem {
         const trThead = document.createElement('template');
         let trContent = '';
         trContent +=    `<tr>`;
-        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(1)"> Nome Popular </th>`;
+        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(this.cellIndex)"> Nome Popular </th>`;
         trContent +=        `<th class="align-middle"></th>`;
-        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(3)"> Nome Científico </th>`;
-        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(4)"> Família </th>`;
-        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(5)"> Interesse Médico </th>`;
+        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(this.cellIndex)"> Nome Científico </th>`;
+        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(this.cellIndex)"> Família </th>`;
+        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(this.cellIndex)"> Interesse Médico </th>`;
         trContent +=    `</tr>`;
         trThead.innerHTML = trContent;
         return trThead.content.firstElementChild;
