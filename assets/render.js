@@ -13,11 +13,11 @@ class MountItem {
         const trThead = document.createElement('template');
         let trContent = '';
         trContent +=    `<tr>`;
-        trContent +=        `<th class="align-middle" scope="row" role="button" onclick="sortTableByColumn(1)"> Nome Popular </th>`;
-        trContent +=        `<th class="align-middle" scope="row" role="button" onclick="sortTableByColumn(2)"> Nome Científico </th>`;
-        trContent +=        `<th class="align-middle" scope="row" role="button" onclick="sortTableByColumn(3)"> Família </th>`;
-        trContent +=        `<th class="align-middle" scope="row" role="button" onclick="sortTableByColumn(4)"> Interesse Médico </th>`;
-        trContent +=        `<th class="align-middle" scope="row"></th>`;
+        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(1)"> Nome Popular </th>`;
+        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(2)"> Nome Científico </th>`;
+        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(3)"> Família </th>`;
+        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(4)"> Interesse Médico </th>`;
+        trContent +=        `<th class="align-middle"></th>`;
         trContent +=    `</tr>`;
         trThead.innerHTML = trContent;
         return trThead.content.firstElementChild;
@@ -26,11 +26,14 @@ class MountItem {
     #getNewTrTbody() {
         const trTbody = document.createElement('template');
         let editContent = `Editar&nbsp;<i class="fa-sharp fa-solid fa-pen-to-square"></i>`;
+        let editTitle = `title="Editar essa maldita serpente."`;
         let detailsContent = `Detalhes&nbsp;<i class="fa-sharp fa-solid fa-circle-info"></i>`;
+        let detailsTitle = `title="Malditos detalhes dessa maldita serpente."`;
         let deleteContent = `Remover&nbsp;<i class="fa-sharp fa-solid fa-trash"></i>`;
-        let btnEdit = `<button type="button" class="btn btn-outline-warning btn-sm">${editContent}</button>`;
-        let btnDetails = `<button type="button" class="btn btn-outline-info btn-sm">${detailsContent}</button>`;
-        let btnDelete = `<button type="button" class="btn btn-outline-danger btn-sm">${deleteContent}</button>`;
+        let deleteTitle = `title="Remover essa maldita serpente desse maldito avião".`
+        let btnEdit = `<button type="button" class="btn btn-outline-warning btn-sm" ${editTitle}>${editContent}</button>`;
+        let btnDetails = `<button type="button" class="btn btn-outline-info btn-sm" ${detailsTitle}>${detailsContent}</button>`;
+        let btnDelete = `<button type="button" class="btn btn-outline-danger btn-sm" ${deleteTitle}>${deleteContent}</button>`;
         trTbody.innerHTML = `<tr> <td class="align-middle"></td> <td class="align-middle"></td> <td class="align-middle"></td> <td class="align-middle"></td> <td class="align-middle"> ${btnEdit} ${btnDetails} ${btnDelete} </td> </tr>`;
         return trTbody.content.firstElementChild;
     }
@@ -38,20 +41,20 @@ class MountItem {
     #mountHeader() {
         const header = document.querySelector("header");
         header.innerHTML = `
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="index.html"> Serpents </a>
+                    <a class="navbar-brand" href="index.html"> Serpentes a bordo </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="index.html"> Home </a>
+                            <li class="nav-item active">
+                                <a class="nav-link text-light" href="index.html"> Home </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="create.html"> Create New </a>
+                                <a class="nav-link text-light" href="create.html"> Adicionar Serpente </a>
                             </li>
                         </ul>
                     </div>
@@ -62,11 +65,29 @@ class MountItem {
 
     #mountFooter() {
         const footer = document.querySelector("footer");
+        let fileName = Utils.getFileName(Utils.getActualUrl());
+
         footer.innerHTML = `
             <div class="container">
-                &copy; 2023 - Serpents - <a href="privacy.html"> Privacy </a>
+                &copy; 2023 - Serpents a bordo
             </div>
         `;
+
+        if (fileName == "index.html") {
+            const myModal = document.createElement("template");
+            let modalContent = `
+                <dialog id="my-modal" onclick="ifModalClick(event)">
+                    <h2> Serpentes a bordo </h2>
+                    <p> Olá. Aqui é Samuel L Jackson! Estou a bordo de um avião repleto de serpentes e necessito de sua ajuda. </p>
+                    <p> Criminosos enfestaram o avião com as mais diversas serpentes, a maioria peçonhentas, e precisamos nos livrar delas. </p>
+                    <p> Preciso por favor que remova uma a uma até que consigamos nos livrar de todas essas malditas serpentes nesse maldito avião. </p>
+                    <button id="botao-fechar"> Fechar modal </button>
+                </dialog>
+            ;`
+
+            myModal.innerHTML = modalContent;
+            footer.before(myModal.content.firstChild);
+        }
     }
 
     #mountTable() {
@@ -338,18 +359,3 @@ class Render {
         }
     }
 }
-
-function afterLoad() {
-    let actualUrl = Utils.getActualUrl();
-    let fileName = Utils.getFileName(actualUrl);
-    let homePageUrl = Utils.getHomePageUrl(actualUrl);
-    
-    const mountItem = new MountItem(Template);
-    const render = new Render(actualUrl, fileName, homePageUrl, Pages, mountItem);
-    
-    render.renderPage();
-    
-    console.log("Carregou aqui");
-}
-
-window.onload = setTimeout(afterLoad, 50);

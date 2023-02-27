@@ -1,3 +1,5 @@
+const myModal = document.querySelector('#my-modal');
+
 function initializeSerpents() {
     let serpentsToPush = [
         ["Surucucu", "Lachesis muta", true, Family.Viperidae],
@@ -108,3 +110,35 @@ function startDeleteSerpent(e) {
 
 const backToHomePage = () => Utils.backToHomePage();
 const goToPage = (pageName) => Utils.goToPage(pageName);
+
+function afterLoad() {
+    let actualUrl = Utils.getActualUrl();
+    let fileName = Utils.getFileName(actualUrl);
+    let homePageUrl = Utils.getHomePageUrl(actualUrl);
+    
+    const mountItem = new MountItem(Template);
+    const render = new Render(actualUrl, fileName, homePageUrl, Pages, mountItem);
+    
+    render.renderPage();
+
+    // const myModal = document.querySelector('#my-modal');
+    // myModal.showModal();
+    
+    console.log("Carregou aqui");
+}
+
+function ifModalClick(e) {
+    let position = myModal.getBoundingClientRect();
+    let backdropTop = position.top;
+    let backdropBottom = position.bottom;
+    let backdropLeft = position.left;
+    let backdropRight = position.right;
+
+    if (e.clientY > backdropTop && e.clientY < backdropBottom && e.clientX > backdropLeft && e.clientX < backdropRight) {
+        return;
+    }
+    
+    myModal.close();
+};
+
+window.onload = setTimeout(afterLoad, 50);
