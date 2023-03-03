@@ -58,8 +58,10 @@ function pushNewSerpent(serpent) {
     serpentarium.setNewSerpent(serpent);
 }
 
-function sortTableByColumn(cellIndex) {
-    const allTh = document.querySelectorAll("tr > th");
+function sortTableByColumn(thElement) {
+    let cellIndex = thElement.cellIndex;
+    const theadElement = thElement.closest("thead");
+    const allTh = theadElement.querySelectorAll("tr > th");
     let asc = allTh[cellIndex].toggleAttribute("data-order-by");
 
     for (let i = 0; i < allTh.length; i++) {
@@ -74,7 +76,7 @@ function sortTableByColumn(cellIndex) {
         }
     }
     
-    Utils.sortTableByColumn(cellIndex + 1, asc);
+    Utils.sortTableByColumn(theadElement, cellIndex, asc);
 }
 
 function startCreateNewSerpent(e) {
@@ -150,12 +152,16 @@ function afterLoad() {
     const mountItem = new MountItem(Template);
     const render = new Render(actualUrl, fileName, homePageUrl, Pages, mountItem);
     render.renderPage();
-
-    if (firstTimeOnThePlane === true)
-        mountItem.mountDialog();
     
-    console.log("Carregou aqui");
+    if (firstTimeOnThePlane === true)
+    mountItem.mountDialog();
+    
+    console.log("Load is completed.");
 }
 
 
-window.onload = setTimeout(afterLoad, 50);
+document.addEventListener("click", e => {
+    if (e.target.nodeName.toLowerCase() == "th")
+        Utils.sortTableByColumn(e.target);
+});
+document.addEventListener("DOMContentLoaded", () => setTimeout(afterLoad, 50));

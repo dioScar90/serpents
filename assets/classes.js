@@ -20,19 +20,60 @@ class Utils {
         // are here. Numbers, text, some custom case-insensitive
         // and natural number ordering, etc. That's up to you.
         // A typical "do whatever JS would do" is:
+        if (!isNaN(a))
+            a = +a;
+
+        if (!isNaN(b))
+            b = +b;
+    
         if (asc === true)
             return (a < b) ? -1 : (a > b) ? 1 : 0;
         return (a > b) ? -1 : (a < b) ? 1 : 0;
+    }
+
+    static #cleanAllThAttributes(allTh, cellIndex, cellIndexException = -1) {
+        // const allThClone = allTh.nodeClone(true);
+        
+        try {
+            for (let i = 0; i < allTh.length; i++) {
+                if (i != cellIndexException) {
+                    const iFontAwesome = allTh[i].querySelector("i");
+
+                    if (iFontAwesome !== null)
+                        iFontAwesome.remove();
+
+                    if (i != cellIndex)
+                        allTh[i].removeAttribute("data-order-by");
+                }
+            }
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+
+        // allTh.firstElementParent.innerHTML = '';
+        // allTh.firstElementParent.append(allThClone);
+        // return false;
     }
 
     /**
      * This method I copied by this Stack Overflow's answer: https://stackoverflow.com/a/55462779
      * I just added the 'asc' parameter and the second return at #compareValues();
      */
-    static sortTableByColumn(colNum, asc = true) {  
-        const tableTbody = document.querySelector("table > tbody");
-        const thToConcatFontAwesome = document.querySelectorAll("tr > th");
+    static sortTableByColumn(thElement) {
+        const theadElement = thElement.closest("thead");
+        const allTh = theadElement.querySelectorAll("tr > th");
+        let cellIndex = thElement.cellIndex;
+        let colNum = cellIndex + 1;
+        let asc = allTh[cellIndex].toggleAttribute("data-order-by");
 
+        let allThCleaned = this.#cleanAllThAttributes(allTh, cellIndex, 1);
+        if (allThCleaned !== true)
+            return;
+        
+        const tableTbody = theadElement.nextElementSibling;
+        // const thToConcatFontAwesome = theadElement.querySelectorAll("tr > th");
+        
         // get all the rows in this table:
         let rows = [...tableTbody.querySelectorAll("tr")];
         
@@ -44,17 +85,19 @@ class Utils {
         rows.sort( (r1, r2) => {
             // get each row's relevant column
             let t1 = r1.querySelector(qs);
+            let t1TextContent = t1.textContent.trim().toLowerCase();
             let t2 = r2.querySelector(qs);
+            let t2TextContent = t2.textContent.trim().toLowerCase();
         
             // and then effect sorting by comparing their content:
-            return this.#compareValues(t1.textContent, t2.textContent, asc);
+            return this.#compareValues(t1TextContent, t2TextContent, asc);
         });
         
         // and then the magic part that makes the sorting appear on-page:
         rows.forEach(row => tableTbody.append(row));
         
         let iContent = asc === true ? `<i class="fa-solid fa-arrow-up-short-wide"></i>` : `<i class="fa-solid fa-arrow-down-short-wide"></i>`;
-        thToConcatFontAwesome[colNum - 1].innerHTML += iContent;
+        allTh[cellIndex].innerHTML += iContent;
     }
     
     static getIdWithZero(id) {

@@ -13,11 +13,11 @@ class MountItem {
         const trThead = document.createElement('template');
         let trContent = '';
         trContent +=    `<tr>`;
-        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(this.cellIndex)"> Nome Popular </th>`;
+        trContent +=        `<th class="align-middle" role="button"> Nome Popular </th>`;
         trContent +=        `<th class="align-middle"></th>`;
-        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(this.cellIndex)"> Nome Científico </th>`;
-        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(this.cellIndex)"> Família </th>`;
-        trContent +=        `<th class="align-middle" role="button" onclick="sortTableByColumn(this.cellIndex)"> Interesse Médico </th>`;
+        trContent +=        `<th class="align-middle" role="button"> Nome Científico </th>`;
+        trContent +=        `<th class="align-middle" role="button"> Família </th>`;
+        trContent +=        `<th class="align-middle" role="button"> Interesse Médico </th>`;
         trContent +=    `</tr>`;
         trThead.innerHTML = trContent;
         return trThead.content.firstElementChild;
@@ -65,35 +65,32 @@ class MountItem {
 
     #mountDialog() {
         const footer = document.querySelector("footer");
-        const template = document.createElement("template");
         let modalContent = `
-            <dialog id="my-modal" onclick="ifModalClick(event)" class="bg-secondary bg-gradient text-light">
-                <h2 class="text-dark"> Serpentes a bordo </h2>
-                <p> Olá. Aqui é Samuel L Jackson! Estou a bordo de um avião repleto de serpentes e necessito de sua ajuda. </p>
-                <p> Criminosos enfestaram o avião com as mais diversas serpentes, a maioria peçonhentas, e precisamos nos livrar delas. </p>
-                <p> Preciso por favor que remova uma a uma até que consigamos nos livrar de todas essas malditas serpentes nesse maldito avião. </p>
+            <dialog id="my-modal" onclick="ifModalClick(event)" class="bg-dark bg-gradient text-white">
+                <h2 class="text-white text-center"> Serpentes a bordo </h2>
+                <p class="text-justify text-indent"> Olá. Aqui é Samuel L Jackson! Estou a bordo de um avião repleto de serpentes e necessito de sua ajuda. </p>
+                <p class="text-justify text-indent"> Criminosos enfestaram o avião com as mais diversas serpentes, a maioria peçonhentas, e precisamos nos livrar delas. </p>
+                <p class="text-justify text-indent"> Preciso por favor que remova uma a uma até que consigamos nos livrar de todas essas malditas serpentes nesse maldito avião. </p>
                 <div class="d-flex justify-content-center">
-                    <button id="botao-fechar" class="btn btn-dark" onclick="closeModal()"> Começar </button>
+                    <button id="botao-fechar" class="btn btn-light" onclick="closeModal()"> Começar </button>
                 </div>
             </dialog>
         ;`
 
-        template.innerHTML = modalContent;
-        const myModal = template.content.firstElementChild;
-        footer.before(myModal);
+        footer.insertAdjacentHTML("beforebegin", modalContent);
 
         document.querySelector("#my-modal").showModal();
     }
 
     #mountFooter() {
         const footer = document.querySelector("footer");
-        let fileName = Utils.getFileName(Utils.getActualUrl());
-
-        footer.innerHTML = `
+        let footerContent = `
             <div class="container text-light">
                 &copy; 2023 - Serpentes a Bordo
             </div>
         `;
+        
+        footer.insertAdjacentHTML("afterbegin", footerContent);
     }
 
     #mountTable() {
@@ -110,6 +107,7 @@ class MountItem {
         const total = document.querySelector("#total");
     
         const trThead = this.#getNewTrThead();
+        thead.insertAdjacentHTML("afterbegin", trThead);
         thead.append(trThead);
         
         for (let i = 0; i < sessionKeys.length; i++) {
@@ -148,8 +146,7 @@ class MountItem {
             return;
         }
         
-        trThead.firstElementChild.toggleAttribute("data-order-by");
-        Utils.sortTableByColumn(1);
+        Utils.sortTableByColumn(thead.querySelector("th"));
         
         total.firstElementChild.innerHTML = totalSerpents;
     }

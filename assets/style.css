@@ -3,9 +3,14 @@ body {
     color: #fff;
 }
 
+.text-indent {
+    text-indent: 3em;
+}
+
 #my-modal::backdrop {
     background-color: rgb(0 0 0 / .5);
 }
+
 #my-modal {
     border: none;
     border-radius: .5rem;
