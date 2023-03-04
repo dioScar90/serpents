@@ -80,6 +80,7 @@ class MountItem {
         footer.insertAdjacentHTML("beforebegin", modalContent);
 
         document.querySelector("#my-modal").showModal();
+        setTimeout(() => document.querySelector("#my-modal button").blur(), 50);
     }
 
     #mountFooter() {
@@ -94,7 +95,7 @@ class MountItem {
     }
 
     #mountTable() {
-        let sessionKeys = Utils.getObjectKeysAsArray(window.sessionStorage);
+        let sessionKeys = Utils.getObjectKeysAsArray(sessionStorage);
         let totalSerpents = 0;
     
         if (sessionKeys.length == 0)
@@ -107,7 +108,7 @@ class MountItem {
         const total = document.querySelector("#total");
     
         const trThead = this.#getNewTrThead();
-        thead.insertAdjacentHTML("afterbegin", trThead);
+        // thead.insertAdjacentHTML("afterbegin", trThead);
         thead.append(trThead);
         
         for (let i = 0; i < sessionKeys.length; i++) {
@@ -134,11 +135,11 @@ class MountItem {
         }
 
         if (tbody.children.length == 0) {
-            const table = thead.parentNode;
-            const divInfo = table.nextElementSibling;
+            const divTable = thead.closest("div");
+            const divInfo = divTable.nextElementSibling;
             const btnDeleteAll = divInfo.nextElementSibling;
 
-            table.classList.add("d-none");
+            divTable.classList.add("d-none");
             btnDeleteAll.classList.add("d-none");
             divInfo.classList.remove("d-none");
             total.innerHTML = "Não há mais nenhuma serpente no avião.";
@@ -295,14 +296,14 @@ class Render {
     #backToHomePage = (homePageUrl) => Utils.loadPage(homePageUrl);
 
     #checkSessionLength() {
-        if (window.sessionStorage.length == 0)
+        if (sessionStorage.length == 0)
             this.#backToHomePage(homePageUrl);
     }
 
     #caseIndex(title) {
         document.title = title;
 
-        if (window.sessionStorage.length == 0) {
+        if (sessionStorage.length == 0) {
             firstTimeOnThePlane = true;
             initializeSerpents();
         }

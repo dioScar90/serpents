@@ -15,5 +15,5 @@ body {
     border: none;
     border-radius: .5rem;
     box-shadow: 0 0 1em rgb(0 0 0 / .5);
-    width: 30%;
+    width: max(30%, 500px);
 }

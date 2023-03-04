@@ -107,7 +107,7 @@ class Utils {
 
     static getSerpentAfterJson(id, alreadyCorrectId = false) {
         let correctId = alreadyCorrectId === true ? id : "serp_" + this.getIdWithZero(id);
-        let strToJson = window.sessionStorage.getItem(correctId);
+        let strToJson = sessionStorage.getItem(correctId);
         return JSON.parse(strToJson);
     }
 
@@ -116,7 +116,7 @@ class Utils {
 
         try {
             let serpId = "serp_" + this.getIdWithZero(newSerpentObj.id);
-            window.sessionStorage.setItem(serpId, JSON.stringify(newSerpentObj));
+            sessionStorage.setItem(serpId, JSON.stringify(newSerpentObj));
             success = true;
         } catch (e) {
             console.log(e);
@@ -130,7 +130,7 @@ class Utils {
 
         try {
             let serpId = "serp_" + this.getIdWithZero(serpentObj.id);
-            window.sessionStorage.setItem(serpId, JSON.stringify(serpentObj));
+            sessionStorage.setItem(serpId, JSON.stringify(serpentObj));
             success = true;
         } catch (e) {
             console.log(e);
@@ -146,7 +146,7 @@ class Utils {
             let serpId = "serp_" + this.getIdWithZero(id);
             let serpentToDelete = this.getSerpentAfterJson(serpId, true);
             serpentToDelete.isActive = false;
-            window.sessionStorage.setItem(serpId, JSON.stringify(serpentToDelete));
+            sessionStorage.setItem(serpId, JSON.stringify(serpentToDelete));
             success = true;
         } catch (e) {
             console.log(e);
@@ -159,13 +159,13 @@ class Utils {
         let allSerpentDeleted = false;
 
         try {
-            let sessionKeys = this.getObjectKeysAsArray(window.sessionStorage);
+            let sessionKeys = this.getObjectKeysAsArray(sessionStorage);
             for (let i = 0; i < sessionKeys.length; i++) {
                 let serpent = Utils.getSerpentAfterJson(sessionKeys[i], true);
-                
-                if (serpent.isActive === true) {
+
+                if (serpent.isActive === true || !Object.hasOwn(serpent, "isActive")) {
                     serpent.isActive = false;
-                    window.sessionStorage.setItem(sessionKeys[i], JSON.stringify(serpent));
+                    sessionStorage.setItem(sessionKeys[i], JSON.stringify(serpent));
                 }
             }
             allSerpentDeleted = true;
@@ -199,12 +199,12 @@ class FormValues {
     #processValues(mustCreateNewId) {
         for (let [name, val] of this.#data) {
             if (name == "id" && mustCreateNewId === true) {
-                let arrKeys = Utils.getObjectKeysAsArray(window.sessionStorage).sort();
+                let arrKeys = Utils.getObjectKeysAsArray(sessionStorage).sort();
                 let lastKey = arrKeys.at(-1);
                 let keyAsNumber = +lastKey.split("serp_")[1];
                 val = ++keyAsNumber;
             }
-            this.#newObj[name] = name == "medicalInterest" ? JSON.parse(val) : val;
+            this.#newObj[name] = name == "medicalInterest" || name == "isActive" ? JSON.parse(val) : val;
         }
     }
 
@@ -313,12 +313,12 @@ class Serpentarium {
         this.#serpentsArray.push(serpent);
         
         let serpId = "serp_" + Utils.getIdWithZero(serpent.id);
-        let isSerpentAlreadySetted = window.sessionStorage.getItem(serpId);
+        let isSerpentAlreadySetted = sessionStorage.getItem(serpId);
 
         if (isSerpentAlreadySetted !== false && isSerpentAlreadySetted !== null)
             throw "Serpent is already setted on sessionStorage()";
 
         let serpData = JSON.stringify(serpent.getSerpentAsAnObjectToJson());
-        window.sessionStorage.setItem(serpId, serpData);
+        sessionStorage.setItem(serpId, serpData);
     }
 }
