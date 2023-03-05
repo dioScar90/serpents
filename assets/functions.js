@@ -37,13 +37,13 @@ function initializeSerpents() {
         ["Pelágio (cobra-marinha)", "Hydrophis belcheri", true, Family.Elapidae]
     ];
 
-    let serpentarium = new Serpentarium();
+    let airplane = new Airplane();
     serpentsToPush.forEach((serpent) => {
-        const lenSerp = serpentarium.getAllSerpents().length > 0 ? serpentarium.getAllSerpents().at(-1).id : 0;
-        serpentarium.setNewSerpent(new Serpent(serpent[0], serpent[1], serpent[2], serpent[3], lenSerp));
+        const lenSerp = airplane.getAllSerpents().length > 0 ? airplane.getAllSerpents().at(-1).id : 0;
+        airplane.setNewSerpent(new Serpent(serpent[0], serpent[1], serpent[2], serpent[3], lenSerp));
     });
     
-    serpentarium.getAllSerpents().forEach((serpent) => {
+    airplane.getAllSerpents().forEach((serpent) => {
         console.log("Id: " + serpent.id + "\n" +
         "Nome popular: " + serpent.popularName + "\n" +
         "Nome científico: " + serpent.cientificName + "\n" +
@@ -55,7 +55,7 @@ function initializeSerpents() {
 }
 
 function pushNewSerpent(serpent) {
-    serpentarium.setNewSerpent(serpent);
+    airplane.setNewSerpent(serpent);
 }
 
 function sortTableByColumn(thElement) {

@@ -264,7 +264,7 @@ class Serpent {
     }
 }
 
-class Serpentarium {
+class Airplane {
     #serpentsArray;
 
     constructor() {
@@ -295,9 +295,9 @@ class Serpentarium {
 
             this.#serpentsArray.forEach((serpent) => {
                 if (serpent.isActive === true)
-                    activeSerpents.push(serpent);
+                activeSerpents.push(serpent);
             });
-
+            
             return activeSerpents;
         }
 
@@ -309,8 +309,11 @@ class Serpentarium {
         return this.#serpentsArray.at(idxToReturn);
     }
 
-    setNewSerpent(serpent) {
+    setNewSerpent(serpent, doNotSetItemSessionOnlyPushClass = false) {
         this.#serpentsArray.push(serpent);
+        
+        if (doNotSetItemSessionOnlyPushClass === true)
+            return;
         
         let serpId = "serp_" + Utils.getIdWithZero(serpent.id);
         let isSerpentAlreadySetted = sessionStorage.getItem(serpId);
