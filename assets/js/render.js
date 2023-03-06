@@ -373,7 +373,7 @@ class Render {
 
         switch (this.#fileName) {
             case enumPages.Index :
-                this.#caseIndex("Serpentário");
+                this.#caseIndex("Serpentes a Bordo");
                 break;
             case enumPages.Edit :
                 this.#caseEdit("Editar", this.#actualUrl, this.#homePageUrl);            
