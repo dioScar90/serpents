@@ -88,9 +88,16 @@ class Utils {
             let t1TextContent = t1.textContent.trim().toLowerCase();
             let t2 = r2.querySelector(qs);
             let t2TextContent = t2.textContent.trim().toLowerCase();
+
+            if (!isNaN(t1TextContent))
+                t1TextContent = +t1TextContent;
+
+            if (!isNaN(t2TextContent))
+                t2TextContent = +t2TextContent;
         
             // and then effect sorting by comparing their content:
-            return this.#compareValues(t1TextContent, t2TextContent, asc);
+            // return this.#compareValues(t1TextContent, t2TextContent, asc);
+            return asc === true ? t1TextContent.localeCompare(t2TextContent) : t2TextContent.localeCompare(t1TextContent);
         });
         
         // and then the magic part that makes the sorting appear on-page:
