@@ -51,7 +51,7 @@ class Utils {
             console.log(e);
         }
 
-        // allTh.firstElementParent.innerHTML = '';
+        // allTh.firstElementParent.replaceChildren();
         // allTh.firstElementParent.append(allThClone);
         // return false;
     }

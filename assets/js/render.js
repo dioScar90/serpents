@@ -102,9 +102,9 @@ class MountItem {
             return;
         
         const thead = document.querySelector("thead");
-        thead.innerHTML = '';
+        thead.replaceChildren();
         const tbody = document.querySelector("tbody");
-        tbody.innerHTML = '';
+        tbody.replaceChildren();
         const total = document.querySelector("#total");
     
         const trThead = this.#getNewTrThead();
